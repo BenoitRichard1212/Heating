@@ -30,12 +30,12 @@ $temperatures = mysqli_query($connectdb,$sql);
 ?>
 <html>
 <head>
-<title>Environment - 4thDnet</title>
+<title>Chauffage</title>
 </head>
 
 <body>
 </body>
-<center>Temperatures</center>
+<center>Températures Maison</center>
 <br><br>
 <table width="800" border="1" cellpadding="1" cellspacing="1" align="center">
 <tr>
