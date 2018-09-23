@@ -10,12 +10,10 @@ def connect():
         _db_conn = mysql.connector.connect(host='localhost',
                                        database='Heating',
                                        user='root',
-                                       password='')
+                                       password='B3nmal!gn312')
         if _db_conn.is_connected():
             print('Connected to MySQL database')
             _db_cursor = _db_conn.cursor()
-        except Error as e:
-            print(e)
 
 def close():
     _db_conn.close()
