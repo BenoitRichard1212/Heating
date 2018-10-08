@@ -140,8 +140,8 @@ if __name__ == '__main__':
     rooms = getAllRooms()
     for room in rooms
         if (room.relay == "close")
-            if (getSensorTemp(room.sensor_wall) < room.temp_min)
+            if (getSensorTemp(room.sensor_wall) > room.temp_min)
                 openRelay(room.relay)
         else
-            if (getSensorTemp(room.sensor_wall) > room.temp_min)
+            if (getSensorTemp(room.sensor_wall) < room.temp_min)
                 closeRelay(room.relay)
