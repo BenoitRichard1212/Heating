@@ -18,9 +18,9 @@ def connect():
                                            database='temperature',
                                            user='root',
                                            password='B3nmal!gn312')
-                                           if _db_conn.is_connected():
-                                               print('Connected to MySQL database')
-                                               _db_cursor = _db_conn.cursor()
+        if _db_conn.is_connected():
+            print('Connected to MySQL database')
+            _db_cursor = _db_conn.cursor()
     except:
         print("Could not connect to Database")
 
