@@ -39,7 +39,7 @@ def getAllRelays():
     for r in rcount:
         row = cursor.fetchone()
         
-        relay = New Relay(row[0], row[1], row[2])
+        relay = Relay(row[0], row[1], row[2])
         
         relays.append(relay)
     
