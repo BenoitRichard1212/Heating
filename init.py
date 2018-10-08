@@ -6,7 +6,7 @@ from mysql.connector import Error
 import RPi.GPIO as GPIO
 import time
 
-pumpRelay = new Relay("relaypump", "close", 1)
+pumpRelay = Relay("relaypump", "close", 1)
 _db_cursor = None
 _db_conn = None
 
