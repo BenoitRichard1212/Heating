@@ -72,10 +72,10 @@ if __name__ == '__main__':
         GPIO.setup(relay.gpio, GPIO.OUT)
         GPIO.output(relay.gpio, GPIO.HIGH)
 
-        if (relay.status == 'open' and relay.name != 'relaypump')
+        if relay.status == 'open' and relay.name != 'relaypump':
             GPIO.output(relay.gpio, GPIO.LOW)
             isOpen = True
 
     for relay in relays:
-        if (relay.name == 'relaypump' and isOpen == True)
+        if relay.name == 'relaypump' and isOpen == True:
             GPIO.output(pumpRelay.gpio)
