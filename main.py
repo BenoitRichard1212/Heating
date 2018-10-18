@@ -1,4 +1,6 @@
 #!/usr/bin/python
+
+//CHECK ALL IF ADD THE ":" 
 from Models.relay import Relay
 from Models.room import Room
 import mysql.connector
@@ -43,7 +45,7 @@ def getRelay(name):
     _db_conn.close()
     return relay
 
-
+//REDO FUNCTION WITH NEW SHIT
 def getAllRelays():
     relays = []
     connect()
@@ -56,7 +58,7 @@ def getAllRelays():
         relays.append(relay)
     return relays
 
-
+//REDO FUNCTION WITH NEW SHIT
 def getAllRooms():
     rooms = []
     connect()
@@ -97,7 +99,7 @@ def closePumpRelay():
 def openRelay(relay):
     pumpStatus = getPumpRelayStatus()
     
-    if (pumpStatus == "close")
+    if (pumpStatus == "close"):
         openPumpRelay()
         sleep(2)
         GPIO.output(relay.gpio, GPIO.LOW)
@@ -105,7 +107,7 @@ def openRelay(relay):
         query = "UPDATE relays SET status = 'open' WHERE name = '%s';" % (relay.name)
         _db_cursor.execute(query)
         _db_conn.close()
-    else
+    else:
         GPIO.output(relay.gpio, GPIO.LOW)
         connect()
         query = "UPDATE relays SET status = 'open' WHERE name = '%s';" % (relay.name)
