@@ -45,7 +45,7 @@ def getRelay(name):
     _db_conn.close()
     return relay
 
-//REDO FUNCTION WITH NEW SHIT
+
 def getAllRelays():
     relays = []
     connect()
@@ -58,7 +58,7 @@ def getAllRelays():
         relays.append(relay)
     return relays
 
-//REDO FUNCTION WITH NEW SHIT
+
 def getAllRooms():
     rooms = []
     connect()
@@ -72,6 +72,7 @@ def getAllRooms():
     return rooms
 
 
+
 def getSensorTemp(name):
     connect()
     query = "SELECT temperature FROM temperauredata WHERE sensorName = '%s'" % (name)
@@ -79,6 +80,7 @@ def getSensorTemp(name):
     result = mycursor.fetchall()
     _db_conn.close()
     return result
+
 
 
 def openPumpRelay():
@@ -89,12 +91,14 @@ def openPumpRelay():
     GPIO.output(pumpRelay.gpio, GPIO.LOW)
 
 
+
 def closePumpRelay():
     connect()
     query = "UPDATE relays SET status = 'close' WHERE name = '%s';" % (pumpRelay.name)
     _db_cursor.execute(query)    
     _db_conn.close()
     GPIO.output(pumpRelay.gpio, GPIO.HIGH)
+
 
 def openRelay(relay):
     pumpStatus = getPumpRelayStatus()
@@ -114,21 +118,22 @@ def openRelay(relay):
         _db_cursor.execute(query)
         _db_conn.close()
 
+
 def closeRelay(p_relay):
     stayOpen = False
     relays = getAllRelays()
     
-    for relay in relays
-        if (relay.name != pumpRelay.name and relay.name != p_relay.name and pumpRelay.status == "open")
+    for relay in relays:
+        if (relay.name != pumpRelay.name and relay.name != p_relay.name and pumpRelay.status == "open"):
             stayOpen = True
 
-    if (stayOpen == True)
+    if (stayOpen == True):
         GPIO.output(relay.gpio, GPIO.HIGH)
         connect()
         query = "UPDATE relays SET status = 'close' WHERE name = '%s';" % (p_relay.name)
         _db_cursor.execute(query)
         _db_conn.close()
-    else
+    else:
         closePumpRelay()
         GPIO.output(relay.gpio, GPIO.HIGH)
         connect()
@@ -140,10 +145,10 @@ def closeRelay(p_relay):
 if __name__ == '__main__':
     pumpRelay = getPumpRelayStatus()
     rooms = getAllRooms()
-    for room in rooms
-        if (room.relay == "close")
-            if (getSensorTemp(room.sensor_wall) > room.temp_min)
+    for room in rooms:
+        if (room.relay == "close"):
+            if (getSensorTemp(room.sensor_wall) > room.temp_min):
                 openRelay(room.relay)
-        else
-            if (getSensorTemp(room.sensor_wall) < room.temp_min)
+        else:
+            if (getSensorTemp(room.sensor_wall) < room.temp_min):
                 closeRelay(room.relay)
