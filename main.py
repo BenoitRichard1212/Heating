@@ -1,17 +1,20 @@
 #!/usr/bin/python
-
-//CHECK ALL IF ADD THE ":" 
-from Models.relay import Relay
-from Models.room import Room
+from relay import Relay
+from room import Room
 import mysql.connector
 from mysql.connector import Error
 import RPi.GPIO as GPIO
 import time
+from decimal import Decimal
 
-pumpRelay = new Relay("relaypump", "close", 1);
+pumpRelay = Relay("relaypump", "close", 17)
 _db_cursor = None
 _db_conn = None
-
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(17, GPIO.OUT)
+GPIO.setup(22, GPIO.OUT)
+GPIO.setup(27, GPIO.OUT)
+#function get all d'initialisation
 
 def connect():
     """ Connect to MySQL database """
@@ -28,92 +31,180 @@ def connect():
 
 
 def getPumpRelayStatus():
-    connect()
-    query = "SELECT status FROM relays WHERE name = '%s'" % (pumpRelay.name)
+    _db_conn = mysql.connector.connect(host='192.168.0.131',
+                                       database='temperatures',
+                                       user='logger',
+                                       password='password')
+    if _db_conn.is_connected():
+        print('Connected to MySQL database')
+        _db_cursor = _db_conn.cursor()
+    else:
+        print("Could not connect to Database")
+
+    query = "SELECT status FROM relays WHERE name = 'relaypump'"
     _db_cursor.execute(query)
-    result = mycursor.fetchall()
+    result = _db_cursor.fetchall()
     _db_conn.close()
     return result
 
 
 def getRelay(name):
-    connect()
+    _db_conn = mysql.connector.connect(host='192.168.0.131',
+                                       database='temperatures',
+                                       user='logger',
+                                       password='password')
+    if _db_conn.is_connected():
+        print('Connected to MySQL database')
+        _db_cursor = _db_conn.cursor()
+    else:
+        print("Could not connect to Database")
+
     query = "SELECT * FROM relays WHERE name = '%s'" % (name)
     _db_cursor.execute(query)
-    row = mycursor.fetchall()
-    relay = New Relay(row[0], row[1], row[2])
+    row = _db_cursor.fetchone()
+    relay = Relay(row[0], row[1], row[2])
     _db_conn.close()
     return relay
 
 
 def getAllRelays():
     relays = []
-    connect()
+    _db_conn = mysql.connector.connect(host='192.168.0.131',
+                                       database='temperatures',
+                                       user='logger',
+                                       password='password')
+    if _db_conn.is_connected():
+        print('Connected to MySQL database')
+        _db_cursor = _db_conn.cursor()
+    else:
+        print("Could not connect to Database")
+
     query = "SELECT * FROM relays"
-    cursor.execute(sql)
-    rcount = int(cursor.rowcount)
-    for r in rcount:
-        row = cursor.fetchone()
-        relay = New Relay(row[0], row[1], row[2])
+    _db_cursor.execute(query)
+    row = _db_cursor.fetchone()
+    while row is not None:
+        relay = Relay(row[0], row[1], row[2])
         relays.append(relay)
+	row = _db_cursor.fetchone()
     return relays
+    _db_conn.close()
 
 
 def getAllRooms():
     rooms = []
-    connect()
-    query = "SELECT * FROM rooms"
-    cursor.execute(sql)
-    rcount = int(cursor.rowcount)
-    for r in rcount:
-        row = cursor.fetchone()
-        room = New Room(row[0], row[1], row[2], row[3], row[4])
-        rooms.append(room)
-    return rooms
+    _db_conn = mysql.connector.connect(host='192.168.0.131',
+                                       database='temperatures',
+                                       user='logger',
+                                       password='password')
+    if _db_conn.is_connected():
+        print('Connected to MySQL database')
+        _db_cursor = _db_conn.cursor()
+    else:
+        print("Could not connect to Database")
 
+    query = "SELECT * FROM rooms"
+    _db_cursor.execute(query)
+    row = _db_cursor.fetchone()
+    while row is not None:
+        room = Room(row[0], row[1], row[2], row[3], row[4])
+        rooms.append(room)
+	row = _db_cursor.fetchone()
+    return rooms
+    _db_conn.close()
 
 
 def getSensorTemp(name):
-    connect()
-    query = "SELECT temperature FROM temperauredata WHERE sensorName = '%s'" % (name)
+    _db_conn = mysql.connector.connect(host='192.168.0.131',
+                                       database='temperatures',
+                                       user='logger',
+                                       password='password')
+    if _db_conn.is_connected():
+        print('Connected to MySQL database')
+        _db_cursor = _db_conn.cursor()
+    else:
+        print("Could not connect to Database")
+
+    query = "SELECT temperature FROM temperaturedata WHERE sensor = '%s'" % (name)
     _db_cursor.execute(query)
-    result = mycursor.fetchall()
+    row = _db_cursor.fetchone()
+    result = row[0]
     _db_conn.close()
     return result
 
 
 
 def openPumpRelay():
-    connect()
-    query = "UPDATE relays SET status = 'open' WHERE name = '%s';" % (pumpRelay.name)
+    print("JOUVREPUMP")
+    _db_conn = mysql.connector.connect(host='192.168.0.131',
+                                       database='temperatures',
+                                       user='logger',
+                                       password='password')
+    if _db_conn.is_connected():
+        print('Connected to MySQL database')
+        _db_cursor = _db_conn.cursor()
+    else:
+        print("Could not connect to Database")
+
+    query = "UPDATE relays SET status = 'open' WHERE name = 'relaypump';"
     _db_cursor.execute(query)
     _db_conn.close()
-    GPIO.output(pumpRelay.gpio, GPIO.LOW)
+    GPIO.output(17, GPIO.LOW)
 
 
 
 def closePumpRelay():
-    connect()
-    query = "UPDATE relays SET status = 'close' WHERE name = '%s';" % (pumpRelay.name)
+    print("JEFERMEPUMP")
+    _db_conn = mysql.connector.connect(host='192.168.0.131',
+                                       database='temperatures',
+                                       user='logger',
+                                       password='password')
+    if _db_conn.is_connected():
+        print('Connected to MySQL database')
+        _db_cursor = _db_conn.cursor()
+    else:
+        print("Could not connect to Database")
+
+    query = "UPDATE relays SET status = 'close' WHERE name = 'relaypump';"
     _db_cursor.execute(query)    
     _db_conn.close()
-    GPIO.output(pumpRelay.gpio, GPIO.HIGH)
+    GPIO.output(17, GPIO.HIGH)
 
 
 def openRelay(relay):
+    print("STATUS PUMP :")
     pumpStatus = getPumpRelayStatus()
+    print(pumpStatus)
+    print("RELAY OUVRE")
     
     if (pumpStatus == "close"):
         openPumpRelay()
         sleep(2)
         GPIO.output(relay.gpio, GPIO.LOW)
-        connect()
+        _db_conn = mysql.connector.connect(host='192.168.0.131',
+                                       database='temperatures',
+                                       user='logger',
+                                       password='password')
+        if _db_conn.is_connected():
+            print('Connected to MySQL database')
+            _db_cursor = _db_conn.cursor()
+        else:
+            print("Could not connect to Database")
+
         query = "UPDATE relays SET status = 'open' WHERE name = '%s';" % (relay.name)
         _db_cursor.execute(query)
         _db_conn.close()
     else:
         GPIO.output(relay.gpio, GPIO.LOW)
-        connect()
+        _db_conn = mysql.connector.connect(host='192.168.0.131',
+                                       database='temperatures',
+                                       user='logger',
+                                       password='password')
+        if _db_conn.is_connected():
+            print('Connected to MySQL database')
+            _db_cursor = _db_conn.cursor()
+        else:
+            print("Could not connect to Database")
+
         query = "UPDATE relays SET status = 'open' WHERE name = '%s';" % (relay.name)
         _db_cursor.execute(query)
         _db_conn.close()
@@ -122,22 +213,42 @@ def openRelay(relay):
 def closeRelay(p_relay):
     stayOpen = False
     relays = getAllRelays()
-    
+    status = getPumpRelayStatus()
+    print("RELAY JE FERME")
+      
     for relay in relays:
-        if (relay.name != pumpRelay.name and relay.name != p_relay.name and pumpRelay.status == "open"):
+        if (relay.name != "relaypump" and relay.name != p_relay and status == "open"):
             stayOpen = True
 
     if (stayOpen == True):
         GPIO.output(relay.gpio, GPIO.HIGH)
-        connect()
-        query = "UPDATE relays SET status = 'close' WHERE name = '%s';" % (p_relay.name)
+        _db_conn = mysql.connector.connect(host='192.168.0.131',
+                                       database='temperatures',
+                                       user='logger',
+                                       password='password')
+        if _db_conn.is_connected():
+            print('Connected to MySQL database')
+            _db_cursor = _db_conn.cursor()
+        else:
+            print("Could not connect to Database")
+
+        query = "UPDATE relays SET status = 'close' WHERE name = '%s';" % (p_relay)
         _db_cursor.execute(query)
         _db_conn.close()
     else:
         closePumpRelay()
         GPIO.output(relay.gpio, GPIO.HIGH)
-        connect()
-        query = "UPDATE relays SET status = 'close' WHERE name = '%s';" % (p_relay.name)
+        _db_conn = mysql.connector.connect(host='192.168.0.131',
+                                       database='temperatures',
+                                       user='logger',
+                                       password='password')
+        if _db_conn.is_connected():
+            print('Connected to MySQL database')
+            _db_cursor = _db_conn.cursor()
+        else:
+            print("Could not connect to Database")
+
+        query = "UPDATE relays SET status = 'close' WHERE name = '%s';" % (p_relay)
         _db_cursor.execute(query)
         _db_conn.close()
 
@@ -146,9 +257,15 @@ if __name__ == '__main__':
     pumpRelay = getPumpRelayStatus()
     rooms = getAllRooms()
     for room in rooms:
-        if (room.relay == "close"):
+        print(room.temp_min)
+        print(getSensorTemp(room.sensor_wall))
+	relay = getRelay(room.relay)
+	status = relay.status
+        if (status == "close"):
             if (getSensorTemp(room.sensor_wall) > room.temp_min):
-                openRelay(room.relay)
+                print("avant function open")
+                openRelay(getRelay(room.relay))
         else:
             if (getSensorTemp(room.sensor_wall) < room.temp_min):
-                closeRelay(room.relay)
+		print("ferme function ferme")
+                closeRelay(getRelay(room.relay))
