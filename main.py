@@ -169,7 +169,7 @@ def closeRelayLogic(p_relay):
     status = getPumpRelayStatus()
 
     for relay in relays:
-        if (relay.name != "relaypump" and relay.name != p_relay)
+        if (relay.name != "relaypump" and relay.name != p_relay):
             stayOpen = True
 
     if (stayOpen == True):
