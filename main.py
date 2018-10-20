@@ -101,18 +101,17 @@ def getAllRelays():
     if _db_conn.is_connected():
         print('Connected to MySQL database')
         _db_cursor = _db_conn.cursor()
+        query = "SELECT * FROM relays"
+        _db_cursor.execute(query)
+        row = _db_cursor.fetchone()
+        while row is not None:
+            relay = Relay(row[0], row[1], row[2])
+            relays.append(relay)
+            row = _db_cursor.fetchone()
+        _db_conn.close()
+        return relays
     else:
         print("Could not connect to Database")
-
-    query = "SELECT * FROM relays"
-    _db_cursor.execute(query)
-    row = _db_cursor.fetchone()
-    while row is not None:
-        relay = Relay(row[0], row[1], row[2])
-        relays.append(relay)
-        row = _db_cursor.fetchone()
-    _db_conn.close()
-    return relays
 
 
 def getAllRooms():
@@ -125,18 +124,17 @@ def getAllRooms():
     if _db_conn.is_connected():
         print('Connected to MySQL database')
         _db_cursor = _db_conn.cursor()
+        query = "SELECT * FROM rooms"
+        _db_cursor.execute(query)
+        row = _db_cursor.fetchone()
+        while row is not None:
+            room = Room(row[0], row[1], row[2], row[3], row[4])
+            ooms.append(room)
+            row = _db_cursor.fetchone()
+        _db_conn.close()   
+        return rooms
     else:
         print("Could not connect to Database")
-
-    query = "SELECT * FROM rooms"
-    _db_cursor.execute(query)
-    row = _db_cursor.fetchone()
-    while row is not None:
-        room = Room(row[0], row[1], row[2], row[3], row[4])
-        rooms.append(room)
-        row = _db_cursor.fetchone()
-    _db_conn.close()   
-    return rooms
 
 
 def getSensorTemp(name):
@@ -149,15 +147,15 @@ def getSensorTemp(name):
     if _db_conn.is_connected():
         print('Connected to MySQL database')
         _db_cursor = _db_conn.cursor()
+
+        query = "SELECT temperature FROM temperaturedata WHERE sensor = '%s'" % (name)
+        _db_cursor.execute(query)
+        row = _db_cursor.fetchone()
+        result = row[0]
+        _db_conn.close()
+        return result
     else:
         print("Could not connect to Database")
-
-    query = "SELECT temperature FROM temperaturedata WHERE sensor = '%s'" % (name)
-    _db_cursor.execute(query)
-    row = _db_cursor.fetchone()
-    result = row[0]
-    _db_conn.close()
-    return result
 
 
 def openRelayLogic(p_relay):
