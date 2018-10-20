@@ -13,6 +13,45 @@ _db_cursor = None
 _db_conn = None
 #function get all d'initialisation
 
+def closeRelay(p_relay):
+    _db_conn = mysql.connector.connect(host='192.168.0.132',
+                                       database='temperatures',
+                                       user='logger',
+                                       password='password')
+        if _db_conn.is_connected():
+            print('Connected to MySQL database')
+            _db_cursor = _db_conn.cursor()
+        else:
+            print("Could not connect to Database")
+
+    query = "UPDATE relays SET status = 'close' WHERE name = '%s';" % (p_relay.name)
+    _db_cursor.execute(query)
+    _db_cursor.commit()
+    _db_conn.close()
+
+    GPIO.setup(p_relay.gpio, GPIO.OUT)
+    GPIO.output(p_relay.gpio, GPIO.HIGH)
+
+
+def openRelay(p_relay):
+    _db_conn = mysql.connector.connect(host='192.168.0.132',
+                                       database='temperatures',
+                                       user='logger',
+                                       password='password')
+        if _db_conn.is_connected():
+            print('Connected to MySQL database')
+            _db_cursor = _db_conn.cursor()
+        else:
+            print("Could not connect to Database")
+
+    query = "UPDATE relays SET status = 'open' WHERE name = '%s';" % (p_relay.name)
+    _db_cursor.execute(query)
+    _db_cursor.commit()
+    _db_conn.close()
+    GPIO.setup(p_relay.gpio, GPIO.OUT)
+    GPIO.output(p_relay.gpio, GPIO.LOW)
+
+
 def connect():
     """ Connect to MySQL database """
     try:
@@ -136,7 +175,7 @@ def getSensorTemp(name):
     return result
 
 
-
+#No need
 def openPumpRelay():
     print("Function : openPumpRelay")
     _db_conn = mysql.connector.connect(host='192.168.0.132',
@@ -157,7 +196,7 @@ def openPumpRelay():
     GPIO.setup(17, GPIO.OUT)
     GPIO.output(17, GPIO.LOW)
 
-
+#No need
 def closePumpRelay():
     print("Function : closePumpRelay")
     _db_conn = mysql.connector.connect(host='192.168.0.132',
@@ -179,50 +218,19 @@ def closePumpRelay():
     GPIO.output(17, GPIO.HIGH)
 
 
-def openRelay(relay):
+def openRelay(p_relay):
     print("Function : openRelay, status :")
     pumpStatus = getPumpRelayStatus()
     print(pumpStatus)
     print("relay qui souvre :")
-    print(relay.name)
+    print(p_relay.name)
     
     if (pumpStatus == "close"):
-        openPumpRelay()
+        openRelay(getRelay("relaypump"))
         time.sleep(2);
-        GPIO.setup(relay.gpio, GPIO.OUT)
-        GPIO.output(relay.gpio, GPIO.LOW)
-        _db_conn = mysql.connector.connect(host='192.168.0.132',
-                                       database='temperatures',
-                                       user='logger',
-                                       password='password')
-        if _db_conn.is_connected():
-            print('Connected to MySQL database')
-            _db_cursor = _db_conn.cursor()
-        else:
-            print("Could not connect to Database")
-
-        query = "UPDATE relays SET status = 'open' WHERE name = '%s';" % (relay.name)
-        print(query)
-        _db_cursor.execute(query)
-        _db_conn.commit()
-        _db_conn.close()
+        openRelay(p_relay)
     else:
-        GPIO.setup(relay.gpio, GPIO.OUT)
-        GPIO.output(relay.gpio, GPIO.LOW)
-        _db_conn = mysql.connector.connect(host='192.168.0.132',
-                                       database='temperatures',
-                                       user='logger',
-                                       password='password')
-        if _db_conn.is_connected():
-            print('Connected to MySQL database')
-            _db_cursor = _db_conn.cursor()
-        else:
-            print("Could not connect to Database")
-
-        query = "UPDATE relays SET status = 'open' WHERE name = '%s';" % (relay.name)
-        _db_cursor.execute(query)
-        _db_conn.commit()
-        _db_conn.close()
+        openRelay(p_relay)
 
 
 def closeRelay(p_relay):
@@ -242,43 +250,12 @@ def closeRelay(p_relay):
     if (stayOpen == True):
 	print("stayOpen:")
         print(stayOpen)
-        GPIO.setup(relay.gpio, GPIO.OUT)
-        GPIO.output(relay.gpio, GPIO.HIGH)
-        _db_conn = mysql.connector.connect(host='192.168.0.132',
-                                       database='temperatures',
-                                       user='logger',
-                                       password='password')
-        if _db_conn.is_connected():
-            print('Connected to MySQL database')
-            _db_cursor = _db_conn.cursor()
-        else:
-            print("Could not connect to Database")
-
-        query = "UPDATE relays SET status = 'close' WHERE name = '%s';" % (p_relay)
-        _db_cursor.execute(query)
-        _db_conn.commit()
-        _db_conn.close()
+        closeRelay(p_relay)
     else:
         print("stayOpen:")
         print(stayOpen)
-        closePumpRelay()
-        GPIO.setup(relay.gpio, GPIO.OUT)
-        GPIO.output(relay.gpio, GPIO.HIGH)
-        _db_conn = mysql.connector.connect(host='192.168.0.132',
-                                       database='temperatures',
-                                       user='logger',
-                                       password='password')
-        if _db_conn.is_connected():
-            print('Connected to MySQL database')
-            _db_cursor = _db_conn.cursor()
-        else:
-            print("Could not connect to Database")
-
-        query = "UPDATE relays SET status = 'close' WHERE name = '%s';" % (p_relay)
-        print(query)
-        _db_cursor.execute(query)
-        _db_conn.commit()
-        _db_conn.close()
+        closeRelay(getRelay("relaypump"))
+        closeRelay(p_relay)
 
 
 if __name__ == '__main__':
