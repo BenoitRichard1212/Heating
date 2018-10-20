@@ -38,7 +38,7 @@
 			$result = $stmt->get_result();
 			if($result->num_rows === 0) exit('No rows');
 			while($row = $result->fetch_assoc()) {
-			  $room = new Room($row['Room_name'], $row['Max_temp'], $row['Min_temp'], $row['Sensor_room_name'], $row['Sensor_floor_name'], $row['Relay_name']);
+			  $room = new Room($row['name'], $row['temp_min'], $row['sensor_floor'], $row['sensor_wall'], $row['relay']);
 			  array_push($this->m_rooms, $room);
 			}
 			$stmt->close();
@@ -54,14 +54,14 @@
 			$this->connectionBd();
 			$room = NULL;
 
-			if($stmt = $this->m_conn->prepare("SELECT Room_name, Max_temp, Min_temp, Sensor_room_name, Sensor_floor_name, Relay_name FROM rooms WHERE Room_name = ?")) {
+			if($stmt = $this->m_conn->prepare("SELECT name, temp_min, sensor_floor, sensor_wall, relay FROM rooms WHERE name = ?")) {
 
 				$stmt->bind_param("s", $p_roomName);
 	   			$stmt->execute(); 
-	   			$stmt->bind_result($roomName, $roomMaxTemp, $roomMinTemp, $roomSensorName, $roomSensorFloorName, $roomRelayName);
+	   			$stmt->bind_result($name, $temp_min, $sensor_floor, $sensor_wall, $relay);
 
 	   			while ($stmt->fetch()) {
-			    	$room = new Room($roomName, $roomMaxTemp, $roomMinTemp, $roomSensorName, $roomSensorFloorName, $roomRelayName);
+			    	$room = new Room($name, $temp_min, $sensor_floor, $sensor_wall, $relay);
 		    	}
 
 		    $stmt->close();
