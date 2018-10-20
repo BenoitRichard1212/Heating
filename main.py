@@ -157,20 +157,23 @@ def openRelayLogic(p_relay):
         openRelay(p_relay)
 
 
+def pumpOnlyOpen():
+    closePump = True
+    relays = getAllRelays()
+    for relay in relays:
+        if (relay.name != "relaypump" and relay.status == "open"):
+            closePump = False
+    return closePump
+
+
 def closeRelayLogic(p_relay):
-    stayOpen = False
     relays = getAllRelays()
     status = getPumpRelayStatus()
 
-    for relay in relays:
-        if (relay.name != "relaypump" and relay.name != p_relay):
-            stayOpen = True
+    closeRelay(p_relay)
 
-    if (stayOpen == True):
-        closeRelay(p_relay)
-    else:
+    if (pumpOnlyOpen() == True):
         closeRelay(getRelay("relaypump"))
-        closeRelay(p_relay)
 
 
 if __name__ == '__main__':
