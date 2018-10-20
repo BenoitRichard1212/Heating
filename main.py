@@ -9,9 +9,6 @@ from decimal import Decimal
 
 GPIO.setmode(GPIO.BCM)
 pumpRelay = Relay("relaypump", "close", 17)
-_db_cursor = None
-_db_conn = None
-#function get all d'initialisation
 
 def closeRelay(p_relay):
     _db_conn = mysql.connector.connect(host='192.168.0.131',
