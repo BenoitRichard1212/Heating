@@ -261,15 +261,9 @@ def closeRelay(p_relay):
 if __name__ == '__main__':
     pumpRelay = getPumpRelayStatus()
     rooms = getAllRooms()
-    for room in rooms:
-        print("In main, room temp min:")
-        print(room.temp_min)
-        print("sensor current temp :")
-        print(getSensorTemp(room.sensor_wall))
-	relay = getRelay(room.relay)
-        print("A VERIFIER ! ICI NAME !")
-        print(relay.name)
-	status = relay.status
+    for room in rooms:  
+	    relay = getRelay(room.relay)
+	    status = relay.status
         if (status == "close"):
             if (getSensorTemp(room.sensor_wall) > room.temp_min):
                 print("opening relay")
@@ -277,5 +271,5 @@ if __name__ == '__main__':
         else:
             if (getSensorTemp(room.sensor_wall) < room.temp_min):
                 print("closing relay")
-		print(relay.name)
+		        print(relay.name)
                 closeRelay(getRelay(relay.name))
