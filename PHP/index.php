@@ -26,12 +26,11 @@
 			<?php
 				foreach($rooms as $room) {
 					echo '<div class="row";>';
-					echo '<div class="col-4";>'.$room->getRoomName().'</div>';
-					echo '<div class="col-4";>'.$room->getRoomMaxTemp().'</div>';
-					echo '<div class="col-4";>'.$room->getRoomMinTemp().'</div>';
-					echo '<div class="col-4";>'.$room->getRoomSensorName().'</div>';
-					echo '<div class="col-4";>'.$room->getRoomSensorFloorName().'</div>';
-					echo '<div class="col-4";>'.$room->getRoomRelayName().'</div>';
+					echo '<div class="col-4";>'.$room->getName().'</div>';
+					echo '<div class="col-4";>'.$room->getTempMin().'</div>';
+					echo '<div class="col-4";>'.$room->getSensorFloor().'</div>';
+					echo '<div class="col-4";>'.$room->getSensorWall().'</div>';
+					echo '<div class="col-4";>'.$room->getRelay().'</div>';
 					echo '</div>';
 					echo '<br /><br />';
 				}
