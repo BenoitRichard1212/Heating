@@ -14,41 +14,38 @@ _db_conn = None
 #function get all d'initialisation
 
 def closeRelay(p_relay):
-    try:
-        _db_conn = mysql.connector.connect(host='192.168.0.131',
-                                           database='temperatures',
-                                           user='logger',
-                                           password='password')
-        if _db_conn.is_connected():
-            print('Connected to MySQL database closeRelay')
-            _db_cursor = _db_conn.cursor()
-            query = "UPDATE relays SET status = 'close' WHERE name = '%s';" % (p_relay.name)
-            _db_cursor.execute(query)
-            _db_cursor.commit()
-            _db_conn.close()
-
-            GPIO.setup(p_relay.gpio, GPIO.OUT)
-            GPIO.output(p_relay.gpio, GPIO.HIGH)
-    except:
+    _db_conn = mysql.connector.connect(host='192.168.0.131',
+                                       database='temperatures',
+                                       user='logger',
+                                       password='password')
+    if _db_conn.is_connected():
+        print('Connected to MySQL database closeRelay')
+        _db_cursor = _db_conn.cursor()
+        query = "UPDATE relays SET status = 'close' WHERE name = '%s';" % (p_relay.name)
+        _db_cursor.execute(query)
+        _db_cursor.commit()
+        _db_conn.close()
+        GPIO.setup(p_relay.gpio, GPIO.OUT)
+        GPIO.output(p_relay.gpio, GPIO.HIGH)
+    else:
         print("Could not connect to Database closeRelay")
 
 
 def openRelay(p_relay):
-    try:
-        _db_conn = mysql.connector.connect(host='192.168.0.131',
-                                           database='temperatures',
-                                           user='logger',
-                                           password='password')
-        if _db_conn.is_connected():
-            print('Connected to MySQL database openRelay')
-            _db_cursor = _db_conn.cursor()
-            query = "UPDATE relays SET status = 'open' WHERE name = '%s';" % (p_relay.name)
-            _db_cursor.execute(query)
-            _db_cursor.commit()
-            _db_conn.close()
-            GPIO.setup(p_relay.gpio, GPIO.OUT)
-            GPIO.output(p_relay.gpio, GPIO.LOW)
-    except:
+    _db_conn = mysql.connector.connect(host='192.168.0.131',
+                                       database='temperatures',
+                                       user='logger',
+                                       password='password')
+    if _db_conn.is_connected():
+        print('Connected to MySQL database openRelay')
+        _db_cursor = _db_conn.cursor()
+        query = "UPDATE relays SET status = 'open' WHERE name = '%s';" % (p_relay.name)
+        _db_cursor.execute(query)
+        _db_cursor.commit()
+        _db_conn.close()
+        GPIO.setup(p_relay.gpio, GPIO.OUT)
+        GPIO.output(p_relay.gpio, GPIO.LOW)
+    else:
         print("Could not connect to Database openRelay")
 
 
