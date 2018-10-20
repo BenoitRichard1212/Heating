@@ -161,7 +161,7 @@ def getSensorTemp(name):
     return result
 
 
-def openRelay(p_relay):
+def openRelayLogic(p_relay):
     print("Function : openRelay, status :")
     pumpStatus = getPumpRelayStatus()
     print(pumpStatus)
@@ -176,7 +176,7 @@ def openRelay(p_relay):
         openRelay(p_relay)
 
 
-def closeRelay(p_relay):
+def closeRelayLogic(p_relay):
     print("Function : closeRelay, name :")
     print(p_relay)
     stayOpen = False
@@ -210,9 +210,9 @@ if __name__ == '__main__':
         if (status == "close"):
             if (getSensorTemp(room.sensor_wall) > room.temp_min):
                 print("opening relay")
-                openRelay(getRelay(relay.name))
+                openRelayLogic(getRelay(relay.name))
         else:
             if (getSensorTemp(room.sensor_wall) < room.temp_min):
                 print("closing relay")
                 print(relay.name)
-                closeRelay(getRelay(relay.name))
+                closeRelayLogic(getRelay(relay.name))
