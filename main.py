@@ -31,6 +31,7 @@ def connect():
 
 
 def getPumpRelayStatus():
+    print("Function : getPumpRelayStatus")
     _db_conn = mysql.connector.connect(host='192.168.0.131',
                                        database='temperatures',
                                        user='logger',
@@ -49,6 +50,7 @@ def getPumpRelayStatus():
 
 
 def getRelay(name):
+    print("Function : getRelay")
     _db_conn = mysql.connector.connect(host='192.168.0.131',
                                        database='temperatures',
                                        user='logger',
@@ -68,6 +70,7 @@ def getRelay(name):
 
 
 def getAllRelays():
+    print("Function : getAllRelays")
     relays = []
     _db_conn = mysql.connector.connect(host='192.168.0.131',
                                        database='temperatures',
@@ -91,6 +94,7 @@ def getAllRelays():
 
 
 def getAllRooms():
+    print("Function : getAllRooms")
     rooms = []
     _db_conn = mysql.connector.connect(host='192.168.0.131',
                                        database='temperatures',
@@ -114,6 +118,8 @@ def getAllRooms():
 
 
 def getSensorTemp(name):
+    print("Function : getSensorTemp, name")
+    print(name)
     _db_conn = mysql.connector.connect(host='192.168.0.131',
                                        database='temperatures',
                                        user='logger',
@@ -134,7 +140,7 @@ def getSensorTemp(name):
 
 
 def openPumpRelay():
-    print("JOUVREPUMP")
+    print("Function : openPumpRelay")
     _db_conn = mysql.connector.connect(host='192.168.0.131',
                                        database='temperatures',
                                        user='logger',
@@ -153,7 +159,7 @@ def openPumpRelay():
 
 
 def closePumpRelay():
-    print("JEFERMEPUMP")
+    print("Function : closePumpRelay")
     _db_conn = mysql.connector.connect(host='192.168.0.131',
                                        database='temperatures',
                                        user='logger',
@@ -171,10 +177,9 @@ def closePumpRelay():
 
 
 def openRelay(relay):
-    print("STATUS PUMP :")
+    print("Function : openRelay, status :")
     pumpStatus = getPumpRelayStatus()
     print(pumpStatus)
-    print("RELAY OUVRE")
     
     if (pumpStatus == "close"):
         openPumpRelay()
@@ -211,10 +216,11 @@ def openRelay(relay):
 
 
 def closeRelay(p_relay):
+    print("Function : closeRelay, name :")
+    print(p_relay)
     stayOpen = False
     relays = getAllRelays()
     status = getPumpRelayStatus()
-    print("RELAY JE FERME")
       
     for relay in relays:
         if (relay.name != "relaypump" and relay.name != p_relay and status == "open"):
@@ -257,15 +263,17 @@ if __name__ == '__main__':
     pumpRelay = getPumpRelayStatus()
     rooms = getAllRooms()
     for room in rooms:
+        print("In main, room temp min:")
         print(room.temp_min)
+        print("sensor current temp :")
         print(getSensorTemp(room.sensor_wall))
 	relay = getRelay(room.relay)
 	status = relay.status
         if (status == "close"):
             if (getSensorTemp(room.sensor_wall) > room.temp_min):
-                print("avant function open")
+                print("opening relay")
                 openRelay(getRelay(room.relay))
         else:
             if (getSensorTemp(room.sensor_wall) < room.temp_min):
-		print("ferme function ferme")
+                print("closing relay")
                 closeRelay(getRelay(room.relay))
