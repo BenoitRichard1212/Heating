@@ -174,6 +174,7 @@ def closePumpRelay():
     _db_cursor.execute(query)
     _db_conn.commit()   
     _db_conn.close()
+    print("closing pump")
     GPIO.setup(17, GPIO.OUT)
     GPIO.output(17, GPIO.HIGH)
 
@@ -182,6 +183,8 @@ def openRelay(relay):
     print("Function : openRelay, status :")
     pumpStatus = getPumpRelayStatus()
     print(pumpStatus)
+    print("relay qui souvre :")
+    print(relay.name)
     
     if (pumpStatus == "close"):
         openPumpRelay()
