@@ -183,7 +183,7 @@ if __name__ == '__main__':
         print(getSensorTemp(room.sensor_wall))
         if (status == "close"):
             if (getSensorTemp(room.sensor_wall) > room.temp_min):
-                openRelayLogic(getRelay(room.sensor_wall))
+                openRelayLogic(getRelay(room.relay))
         else:
             if (getSensorTemp(room.sensor_wall) < room.temp_min):
-                closeRelayLogic(getRelay(room.sensor_wall))
+                closeRelayLogic(getRelay(room.relay))
