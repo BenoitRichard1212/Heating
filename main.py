@@ -61,15 +61,14 @@ def getPumpRelayStatus():
     if _db_conn.is_connected():
         print('Connected to MySQL database')
         _db_cursor = _db_conn.cursor()
+        query = "SELECT status FROM relays WHERE name = 'relaypump'"
+        _db_cursor.execute(query)
+        row = _db_cursor.fetchone()
+        result = row[0]
+        _db_conn.close()
+        return result
     else:
         print("Could not connect to Database")
-
-    query = "SELECT status FROM relays WHERE name = 'relaypump'"
-    _db_cursor.execute(query)
-    row = _db_cursor.fetchone()
-    result = row[0]
-    _db_conn.close()
-    return result
 
 
 def getRelay(name):
@@ -81,15 +80,15 @@ def getRelay(name):
     if _db_conn.is_connected():
         print('Connected to MySQL database')
         _db_cursor = _db_conn.cursor()
+        query = "SELECT * FROM relays WHERE name = '%s'" % (name)
+        _db_cursor.execute(query)
+        row = _db_cursor.fetchone()
+        relay = Relay(row[0], row[1], row[2])
+        _db_conn.close()
+        return relay
     else:
         print("Could not connect to Database")
 
-    query = "SELECT * FROM relays WHERE name = '%s'" % (name)
-    _db_cursor.execute(query)
-    row = _db_cursor.fetchone()
-    relay = Relay(row[0], row[1], row[2])
-    _db_conn.close()
-    return relay
 
 
 def getAllRelays():
