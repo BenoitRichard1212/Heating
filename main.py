@@ -15,7 +15,7 @@ _db_conn = None
 
 def closeRelay(p_relay):
     try:
-        _db_conn = mysql.connector.connect(host='192.168.0.132',
+        _db_conn = mysql.connector.connect(host='192.168.0.131',
                                            database='temperatures',
                                            user='logger',
                                            password='password')
@@ -35,7 +35,7 @@ def closeRelay(p_relay):
 
 def openRelay(p_relay):
     try:
-        _db_conn = mysql.connector.connect(host='192.168.0.132',
+        _db_conn = mysql.connector.connect(host='192.168.0.131',
                                            database='temperatures',
                                            user='logger',
                                            password='password')
@@ -54,7 +54,7 @@ def openRelay(p_relay):
 
 def getPumpRelayStatus():
     print("Function : getPumpRelayStatus")
-    _db_conn = mysql.connector.connect(host='192.168.0.132',
+    _db_conn = mysql.connector.connect(host='192.168.0.131',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
@@ -73,7 +73,7 @@ def getPumpRelayStatus():
 
 def getRelay(name):
     print("Function : getRelay")
-    _db_conn = mysql.connector.connect(host='192.168.0.132',
+    _db_conn = mysql.connector.connect(host='192.168.0.131',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
@@ -94,7 +94,7 @@ def getRelay(name):
 def getAllRelays():
     print("Function : getAllRelays")
     relays = []
-    _db_conn = mysql.connector.connect(host='192.168.0.132',
+    _db_conn = mysql.connector.connect(host='192.168.0.131',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
@@ -118,7 +118,7 @@ def getAllRelays():
 def getAllRooms():
     print("Function : getAllRooms")
     rooms = []
-    _db_conn = mysql.connector.connect(host='192.168.0.132',
+    _db_conn = mysql.connector.connect(host='192.168.0.131',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
@@ -142,7 +142,7 @@ def getAllRooms():
 def getSensorTemp(name):
     print("Function : getSensorTemp, name")
     print(name)
-    _db_conn = mysql.connector.connect(host='192.168.0.132',
+    _db_conn = mysql.connector.connect(host='192.168.0.131',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
@@ -182,12 +182,9 @@ def closeRelayLogic(p_relay):
     relays = getAllRelays()
     status = getPumpRelayStatus()
 
-#for relay in relays:
-#    if (relay.name == "relaypump" and status == "open"):
-#        stayOpen = True
-#    if (relay.name != p_relay and status == "open"):
-#        stayOpen = True
-#    if (relay.name == p_relay and status == "close"):
+    #for relay in relays:
+    #    if (relay.name != "relaypump" and relay.name != p_relay
+    #        stayOpen = True
 
     if (stayOpen == True):
         print("stayOpen:")
