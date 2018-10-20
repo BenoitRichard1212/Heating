@@ -3,106 +3,70 @@
 
 	class Room
 	{
-		private $m_roomName;
-		private $m_roomMaxTemp;
-		private $m_roomMinTemp;
-		private $m_roomSensorName;
-		private $m_roomSensorFloorName;
-		private $m_roomRelayName;
-		private $m_currentTemp;
-		private $m_currentFloorTemp;
-		public function __construct($p_roomName, $p_roomMaxTemp, $p_roomMinTemp, $p_roomSensorName, $p_roomSensorFloorName, $p_roomRelayName)
-		{
-			$this->m_roomName = $p_roomName;
-			$this->m_roomMaxTemp = $p_roomMaxTemp;
-			$this->m_roomMinTemp = $p_roomMinTemp;
-			$this->m_roomSensorName = $p_roomSensorName;
-			$this->m_roomSensorFloorName = $p_roomSensorFloorName;
-			$this->m_roomRelayName = $p_roomRelayName;
-			$this->m_currentTemp = 0;
-			$this->m_currentFloorTemp = 0;
+		private $m_name;
+		private $m_tempMin;
+		private $m_sensorFloor;
+		private $m_sensorWall;
+		private $m_relay;
+		public function __construct($p_name, $p_tempMin, $p_sensorFloor, $p_sensorWall, $p_relay)
+		}
+			$this->m_name = $p_name;
+			$this->m_tempMin = $p_tempMin;
+			$this->m_sensorFloor = $p_sensorFloor;
+			$this->m_sensorWall = $p_sensorWall;
+			$this->m_relay = $p_relay;
 		}
 
 		//GETTER's
-		public function getRoomName()
+		public function getName()
 		{
-			return $this->m_roomName;
+			return $this->m_name;
 		}
 
-		public function getRoomMaxTemp()
+		public function getTempMin()
 		{
-			return $this->m_roomMaxTemp;
+			return $this->m_tempMin;
 		}
 
-		public function getRoomMinTemp()
+		public function getSensorFloor()
 		{
-			return $this->m_roomMinTemp;
+			return $this->m_sensorFloor;
 		}
 
-		public function getRoomSensorName()
+		public function getSensorWall()
 		{
-			return $this->m_roomSensorName;
+			return $this->m_sensorWall;
 		}
 
-		public function getRoomSensorFloorName()
+		public function getRelay()
 		{
-			return $this->m_roomSensorFloorName;
-		}
-
-		public function getRoomRelayName()
-		{
-			return $this->m_roomRelayName;
-		}
-
-		public function getRoomCurrentTemp()
-		{
-			return $this->m_currentTemp;
-		}
-
-		public function getRoomCurrentFloorTemp()
-		{
-			return $this->m_currentFloorTemp;
+			return $this->m_relay;
 		}
 
 		//SETTER's
-		public function setRoomName($p_roomName)
+		public function setName($p_name)
 		{
-			$this->m_roomName = $p_roomName;
+			$this->m_name = $p_name;
 		}
 
-		public function setRoomMaxTemp($p_roomMaxTemp)
+		public function setTempMin($p_tempMin)
 		{
-			$this->m_roomMaxTemp = $p_roomMaxTemp;
+			$this->m_tempMin = $p_tempMin;
 		}
 
-		public function setRoomMinTemp($p_roomMinTemp)
+		public function setSensorFloor($p_sensorFloor)
 		{
-			$this->m_roomMinTemp = $p_roomMinTemp;
+			$this->m_sensorFloor = $p_sensorFloor;
 		}
 
-		public function setRoomSensorName($p_roomSensorName)
+		public function setSensorWall($p_sensorWall)
 		{
-			$this->m_roomSensorName = $p_roomSensorName;
+			$this->m_sensorWall = $p_sensorWall;
 		}
 
-		public function setRoomSensorFloorName($p_roomSensorFloorName)
+		public function setRelay($p_relay)
 		{
-			$this->m_roomSensorFloorName = $p_roomSensorFloorName;
-		}
-
-		public function setRoomRelayName($p_roomRelayName)
-		{
-			$this->m_roomRelayName = $p_roomRelayName;
-		}
-
-		public function setCurrentRoomTemp($p_roomCurrentTemp)
-		{
-			$this->m_roomSensorFloorName = $p_roomCurrentTemp;
-		}
-
-		public function setCurrentFlooreTemps($p_roomCurrentFloorTemp)
-		{
-			$this->m_roomRelayName = $p_roomCurrentFloorTemp;
+			$this->m_relay = $p_relay;
 		}
 }		
 
