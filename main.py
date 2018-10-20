@@ -7,13 +7,10 @@ import RPi.GPIO as GPIO
 import time
 from decimal import Decimal
 
+GPIO.setmode(GPIO.BCM)
 pumpRelay = Relay("relaypump", "close", 17)
 _db_cursor = None
 _db_conn = None
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(17, GPIO.OUT)
-GPIO.setup(22, GPIO.OUT)
-GPIO.setup(27, GPIO.OUT)
 #function get all d'initialisation
 
 def connect():
@@ -32,7 +29,7 @@ def connect():
 
 def getPumpRelayStatus():
     print("Function : getPumpRelayStatus")
-    _db_conn = mysql.connector.connect(host='192.168.0.131',
+    _db_conn = mysql.connector.connect(host='192.168.0.132',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
@@ -44,14 +41,15 @@ def getPumpRelayStatus():
 
     query = "SELECT status FROM relays WHERE name = 'relaypump'"
     _db_cursor.execute(query)
-    result = _db_cursor.fetchall()
+    row = _db_cursor.fetchone()
+    result = row[0]
     _db_conn.close()
     return result
 
 
 def getRelay(name):
     print("Function : getRelay")
-    _db_conn = mysql.connector.connect(host='192.168.0.131',
+    _db_conn = mysql.connector.connect(host='192.168.0.132',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
@@ -72,7 +70,7 @@ def getRelay(name):
 def getAllRelays():
     print("Function : getAllRelays")
     relays = []
-    _db_conn = mysql.connector.connect(host='192.168.0.131',
+    _db_conn = mysql.connector.connect(host='192.168.0.132',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
@@ -96,7 +94,7 @@ def getAllRelays():
 def getAllRooms():
     print("Function : getAllRooms")
     rooms = []
-    _db_conn = mysql.connector.connect(host='192.168.0.131',
+    _db_conn = mysql.connector.connect(host='192.168.0.132',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
@@ -120,7 +118,7 @@ def getAllRooms():
 def getSensorTemp(name):
     print("Function : getSensorTemp, name")
     print(name)
-    _db_conn = mysql.connector.connect(host='192.168.0.131',
+    _db_conn = mysql.connector.connect(host='192.168.0.132',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
@@ -141,7 +139,7 @@ def getSensorTemp(name):
 
 def openPumpRelay():
     print("Function : openPumpRelay")
-    _db_conn = mysql.connector.connect(host='192.168.0.131',
+    _db_conn = mysql.connector.connect(host='192.168.0.132',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
@@ -152,15 +150,17 @@ def openPumpRelay():
         print("Could not connect to Database")
 
     query = "UPDATE relays SET status = 'open' WHERE name = 'relaypump';"
+    print(query)
     _db_cursor.execute(query)
+    _db_conn.commit()
     _db_conn.close()
+    GPIO.setup(17, GPIO.OUT)
     GPIO.output(17, GPIO.LOW)
-
 
 
 def closePumpRelay():
     print("Function : closePumpRelay")
-    _db_conn = mysql.connector.connect(host='192.168.0.131',
+    _db_conn = mysql.connector.connect(host='192.168.0.132',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
@@ -171,8 +171,10 @@ def closePumpRelay():
         print("Could not connect to Database")
 
     query = "UPDATE relays SET status = 'close' WHERE name = 'relaypump';"
-    _db_cursor.execute(query)    
+    _db_cursor.execute(query)
+    _db_conn.commit()   
     _db_conn.close()
+    GPIO.setup(17, GPIO.OUT)
     GPIO.output(17, GPIO.HIGH)
 
 
@@ -183,9 +185,10 @@ def openRelay(relay):
     
     if (pumpStatus == "close"):
         openPumpRelay()
-        sleep(2)
+        time.sleep(2);
+        GPIO.setup(relay.gpio, GPIO.OUT)
         GPIO.output(relay.gpio, GPIO.LOW)
-        _db_conn = mysql.connector.connect(host='192.168.0.131',
+        _db_conn = mysql.connector.connect(host='192.168.0.132',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
@@ -196,11 +199,14 @@ def openRelay(relay):
             print("Could not connect to Database")
 
         query = "UPDATE relays SET status = 'open' WHERE name = '%s';" % (relay.name)
+        print(query)
         _db_cursor.execute(query)
+        _db_conn.commit()
         _db_conn.close()
     else:
+        GPIO.setup(relay.gpio, GPIO.OUT)
         GPIO.output(relay.gpio, GPIO.LOW)
-        _db_conn = mysql.connector.connect(host='192.168.0.131',
+        _db_conn = mysql.connector.connect(host='192.168.0.132',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
@@ -212,6 +218,7 @@ def openRelay(relay):
 
         query = "UPDATE relays SET status = 'open' WHERE name = '%s';" % (relay.name)
         _db_cursor.execute(query)
+        _db_conn.commit()
         _db_conn.close()
 
 
@@ -222,13 +229,19 @@ def closeRelay(p_relay):
     relays = getAllRelays()
     status = getPumpRelayStatus()
       
-    for relay in relays:
-        if (relay.name != "relaypump" and relay.name != p_relay and status == "open"):
-            stayOpen = True
+    #for relay in relays:
+    #    if (relay.name == "relaypump" and status == "open"):
+    #        stayOpen = True
+    #    if (relay.name != p_relay and status == "open"):
+    #        stayOpen = True
+    #    if (relay.name == p_relay and status == "close"):
 
     if (stayOpen == True):
+	print("stayOpen:")
+        print(stayOpen)
+        GPIO.setup(relay.gpio, GPIO.OUT)
         GPIO.output(relay.gpio, GPIO.HIGH)
-        _db_conn = mysql.connector.connect(host='192.168.0.131',
+        _db_conn = mysql.connector.connect(host='192.168.0.132',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
@@ -240,11 +253,15 @@ def closeRelay(p_relay):
 
         query = "UPDATE relays SET status = 'close' WHERE name = '%s';" % (p_relay)
         _db_cursor.execute(query)
+        _db_conn.commit()
         _db_conn.close()
     else:
+        print("stayOpen:")
+        print(stayOpen)
         closePumpRelay()
+        GPIO.setup(relay.gpio, GPIO.OUT)
         GPIO.output(relay.gpio, GPIO.HIGH)
-        _db_conn = mysql.connector.connect(host='192.168.0.131',
+        _db_conn = mysql.connector.connect(host='192.168.0.132',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
@@ -255,7 +272,9 @@ def closeRelay(p_relay):
             print("Could not connect to Database")
 
         query = "UPDATE relays SET status = 'close' WHERE name = '%s';" % (p_relay)
+        print(query)
         _db_cursor.execute(query)
+        _db_conn.commit()
         _db_conn.close()
 
 
@@ -268,12 +287,15 @@ if __name__ == '__main__':
         print("sensor current temp :")
         print(getSensorTemp(room.sensor_wall))
 	relay = getRelay(room.relay)
+        print("A VERIFIER ! ICI NAME !")
+        print(relay.name)
 	status = relay.status
         if (status == "close"):
             if (getSensorTemp(room.sensor_wall) > room.temp_min):
                 print("opening relay")
-                openRelay(getRelay(room.relay))
+                openRelay(getRelay(relay.name))
         else:
             if (getSensorTemp(room.sensor_wall) < room.temp_min):
                 print("closing relay")
-                closeRelay(getRelay(room.relay))
+		print(relay.name)
+                closeRelay(getRelay(relay.name))

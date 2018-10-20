@@ -14,7 +14,7 @@ _db_conn = None
 def connect():
     """ Connect to MySQL database """
     try:
-        _db_conn = mysql.connector.connect(host='localhost',
+        _db_conn = mysql.connector.connect(host='192.138.0.132',
                                            database='temperature',
                                            user='root',
                                            password='B3nmal!gn312')
