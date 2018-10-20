@@ -8,10 +8,10 @@
 	class BD
 	{
 		private $m_rooms = array();
-		private $m_host = 'localhost';
-		private $m_user = 'root';
-		private $m_password = '';
-		private $m_db = 'heating';	
+		private $m_host = '192.168.0.132';
+		private $m_user = 'logger';
+		private $m_password = 'password';
+		private $m_db = 'temperatures';	
 		private $m_conn;	
 
 		private function connectionBd()
