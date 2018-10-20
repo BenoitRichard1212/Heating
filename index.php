@@ -1,60 +1,47 @@
-<?php
-// Settings
-// host, user and password settings
-$host = "localhost";
-$user = "logger";
-$password = "password";
-$database = "temperatures";
+<!DOCTYPE html>
+	<html>
+		<head>
+			<title>Heating</title>
+			<meta charset="utf-8">
+			  <meta name="viewport" content="width=device-width, initial-scale=1">
+			  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+			  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+			  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		</head>
+		<body>
+			<?php 
+			require("classes/Room.php");
+            require("classes/Sensor.php");
+			require("classes/BD.php");
+            
+            use classes\Sensor;
+			use classes\Room;
+			use classes\BD;
 
-//how many hours backwards do you want results to be shown in web page.
-$hours = 24;
+			$dbHeating = new BD();
+			$rooms = $dbHeating->getAllRooms();
+			?>
 
-// make connection to database
-$connectdb = mysqli_connect($host,$user,$password)
-or die ("Cannot reach database");
+            <a href="sensors.php">Status Sensors.</a>&nbsp;
+            <a href="relays.php">Status Relays.</a>&nbsp;
+			<a href="forms/addRoom.php">Add a room.</a>&nbsp;
+			<a href="forms/globalSetting.php">Global Configuration.</a><br /> <br />
 
-// select db
-mysqli_select_db($connectdb,$database)
-or die ("Cannot select database");
-
-// sql command that selects all entires from current time and X hours backwards
-$sql="SELECT * FROM temperaturedata WHERE dateandtime >= (NOW() - INTERVAL $hours HOUR) order by dateandtime desc";
-
-//NOTE: If you want to show all entries from current date in web page uncomment line below by removing //
-//$sql="select * from temperaturedata where date(dateandtime) = curdate();";
-
-// set query to variable
-$temperatures = mysqli_query($connectdb,$sql);
-
-// create content to web page
-?>
-<html>
-<head>
-<title>Chauffage</title>
-</head>
-
-<body>
-</body>
-<center>Températures Maison</center>
-<br><br>
-<table width="800" border="1" cellpadding="1" cellspacing="1" align="center">
-<tr>
-<th>Date</th>
-<th>Sensor</th>
-<th>Temperature</th>
-<th>Humidity</th>
-<tr>
-<?php
-// loop all the results that were read from database and "draw" to web page
-while($temperature=mysqli_fetch_assoc($temperatures)){
-echo "<tr>";
-echo "<td>".$temperature['dateandtime']."</td>";
-echo "<td>".$temperature['sensor']."</td>";
-echo "<td>".$temperature['temperature']."</td>";
-echo "<td>".$temperature['humidity']."</td>";
-echo "<tr>";
-}
-?>
-</table>
+			<?php
+                echo '<div class="h1";>Pièces</div>';
+                echo '<br /><br />';
+				foreach($rooms as $room) {
+					echo '<div class="row";>';
+                    echo '<div class="col-4";>Nom:'.$room->getName().'</div>';
+                    echo '<div class="col-4";>Température min:'.$room->getTempMin().'</div>';
+                    echo '<div class="col-4";>Sensor plancher:'.$room->getSensorFloor().'</div>';
+                    echo '<div class="col-4";>Sensor mur:'.$room->getSensorWall().'</div>';
+                    echo '<div class="col-4";>Relay:'.$room->getRelay().'</div>';
+                    $sensor = $dbHeating->getSensor($room->getSensorWall());
+                    echo '<div class="col-4";>Température:'.$sensor->getSensor().':'.$sensor->getTemperature().'</div>';
+					echo '</div>';
+					echo '<br /><br />';
+				}
+			?>
+		</body>
 </html>
-

@@ -10,6 +10,18 @@ from decimal import Decimal
 GPIO.setmode(GPIO.BCM)
 pumpRelay = Relay("relaypump", "close", 17)
 
+def connect():
+    _db_conn = mysql.connector.connect(host='192.168.0.131',
+                                       database='temperatures',
+                                       user='logger',
+                                       password='password')
+    if _db_conn.is_connected():
+        print('Connected to MySQL database')
+        _db_cursor = _db_conn.cursor()
+    else:
+        print("Could not connect to Database closeRelay")
+
+
 def closeRelay(p_relay):
     _db_conn = mysql.connector.connect(host='192.168.0.131',
                                        database='temperatures',
