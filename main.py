@@ -20,15 +20,15 @@ def closeRelay(p_relay):
                                            user='logger',
                                            password='password')
         if _db_conn.is_connected():
-        print('Connected to MySQL database')
-        _db_cursor = _db_conn.cursor()
-        query = "UPDATE relays SET status = 'close' WHERE name = '%s';" % (p_relay.name)
-        _db_cursor.execute(query)
-        _db_cursor.commit()
-        _db_conn.close()
+            print('Connected to MySQL database')
+            _db_cursor = _db_conn.cursor()
+            query = "UPDATE relays SET status = 'close' WHERE name = '%s';" % (p_relay.name)
+            _db_cursor.execute(query)
+            _db_cursor.commit()
+            _db_conn.close()
 
-        GPIO.setup(p_relay.gpio, GPIO.OUT)
-        GPIO.output(p_relay.gpio, GPIO.HIGH)
+            GPIO.setup(p_relay.gpio, GPIO.OUT)
+            GPIO.output(p_relay.gpio, GPIO.HIGH)
     except:
         print("Could not connect to Database")
 
@@ -40,14 +40,14 @@ def openRelay(p_relay):
                                            user='logger',
                                            password='password')
         if _db_conn.is_connected():
-        print('Connected to MySQL database')
-        _db_cursor = _db_conn.cursor()
-        query = "UPDATE relays SET status = 'open' WHERE name = '%s';" % (p_relay.name)
-        _db_cursor.execute(query)
-        _db_cursor.commit()
-        _db_conn.close()
-        GPIO.setup(p_relay.gpio, GPIO.OUT)
-        GPIO.output(p_relay.gpio, GPIO.LOW)
+            print('Connected to MySQL database')
+            _db_cursor = _db_conn.cursor()
+            query = "UPDATE relays SET status = 'open' WHERE name = '%s';" % (p_relay.name)
+            _db_cursor.execute(query)
+            _db_cursor.commit()
+            _db_conn.close()
+            GPIO.setup(p_relay.gpio, GPIO.OUT)
+            GPIO.output(p_relay.gpio, GPIO.LOW)
     except:
         print("Could not connect to Database")
 
@@ -125,7 +125,7 @@ def getAllRooms():
                                        password='password')
     if _db_conn.is_connected():
         print('Connected to MySQL database')
-       _db_cursor = _db_conn.cursor()
+        _db_cursor = _db_conn.cursor()
     else:
         print("Could not connect to Database")
 
