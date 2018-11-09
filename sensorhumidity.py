@@ -20,3 +20,5 @@ print(humidity)
 
 
 #Need to find how to grab the humidy
+
+#https://gpiozero.readthedocs.io/en/v1.3.1/api_pins.html
