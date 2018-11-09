@@ -9,3 +9,5 @@ temperature_in_all_units = sensor.get_temperatures([
     W1ThermSensor.DEGREES_F,
     W1ThermSensor.KELVIN])
 
+print(temperature_in_celsius)
+
