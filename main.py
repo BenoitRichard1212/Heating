@@ -157,6 +157,24 @@ def getSensorTemp(name):
     else:
         print("Could not connect to Database getSensorTemp")
 
+def getDeviceTemp(name):
+    _db_conn = mysql.connector.connect(host='192.168.0.131',
+                                       database='temperatures',
+                                       user='logger',
+                                       password='password')
+    if _db_conn.is_connected():
+        print('Connected to MySQL database getSensorTemp')
+        _db_cursor = _db_conn.cursor()
+
+        query = "SELECT temperature FROM temperaturedata WHERE device = '%s'" % (name)
+        _db_cursor.execute(query)
+        row = _db_cursor.fetchone()
+        result = row[0]
+        _db_conn.close()
+        return result
+    else:
+        print("Could not connect to Database getDeviceTemp")        
+
 
 def openRelayLogic(p_relay):
     pumpStatus = getPumpRelayStatus()
@@ -195,10 +213,10 @@ if __name__ == '__main__':
         relay = getRelay(room.relay)
         status = relay.status
         print(room.sensor_wall)
-        print(getSensorTemp(room.sensor_wall))
+        print(getDeviceTemp(room.sensor_floor))
         if (status == "close"):
-            if (getSensorTemp(room.sensor_wall) > room.temp_min):
+            if (getDeviceTemp(room.sensor_floor) > room.temp_min):
                 openRelayLogic(getRelay(room.relay))
         else:
-            if (getSensorTemp(room.sensor_wall) < room.temp_min):
+            if (getDeviceTemp(room.sensor_floor) < room.temp_min):
                 closeRelayLogic(getRelay(room.relay))
