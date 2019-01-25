@@ -212,8 +212,8 @@ if __name__ == '__main__':
     for room in rooms:  
         relay = getRelay(room.relay)
         status = relay.status
-        print(room.sensor_wall)
-        print(getDeviceTemp(room.sensor_floor))
+#        print(room.sensor_wall)
+#        print(getDeviceTemp(room.sensor_floor))
         if (status == "close"):
             if (getDeviceTemp(room.sensor_floor) > room.temp_min):
                 openRelayLogic(getRelay(room.relay))
