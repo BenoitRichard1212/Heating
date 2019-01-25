@@ -218,8 +218,8 @@ if __name__ == '__main__':
         print(room.relay)
         print(status)
         if (status == "close"):
-            if (getDeviceTemp(room.sensor_floor) > room.temp_min):
+            if (getDeviceTemp(room.sensor_floor) < room.temp_min):
                 openRelayLogic(getRelay(room.relay))
         else:
-            if (getDeviceTemp(room.sensor_floor) < room.temp_min):
+            if (getDeviceTemp(room.sensor_floor) > room.temp_min):
                 closeRelayLogic(getRelay(room.relay))
