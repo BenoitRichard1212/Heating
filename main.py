@@ -166,7 +166,7 @@ def getDeviceTemp(name):
         print('Connected to MySQL database getSensorTemp')
         _db_cursor = _db_conn.cursor()
 
-        query = "SELECT temperature FROM temperaturedata WHERE device = '%s'" % (name)
+        query = "SELECT temperature FROM temperaturedata WHERE sensor = '%s'" % (name)
         _db_cursor.execute(query)
         row = _db_cursor.fetchone()
         result = row[0]
