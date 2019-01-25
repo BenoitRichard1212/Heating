@@ -8,7 +8,7 @@ import time
 from decimal import Decimal
 
 GPIO.setmode(GPIO.BCM)
-pumpRelay = Relay("relaypump", "close", 17)
+pumpRelay = Relay("relay_pump", "close", 17)
 
 def connect():
     _db_conn = mysql.connector.connect(host='192.168.0.131',
@@ -180,7 +180,7 @@ def openRelayLogic(p_relay):
     pumpStatus = getPumpRelayStatus()
 
     if (pumpStatus == "close"):
-        openRelay(getRelay("relaypump"))
+        openRelay(getRelay("relay_pump"))
         time.sleep(2);
         openRelay(p_relay)
     else:
@@ -191,7 +191,7 @@ def pumpOnlyOpen():
     closePump = True
     relays = getAllRelays()
     for relay in relays:
-        if (relay.name != "relaypump" and relay.status == "open"):
+        if (relay.name != "relay_pump" and relay.status == "open"):
             closePump = False
     return closePump
 
@@ -203,7 +203,7 @@ def closeRelayLogic(p_relay):
     closeRelay(p_relay)
 
     if (pumpOnlyOpen() == True):
-        closeRelay(getRelay("relaypump"))
+        closeRelay(getRelay("relay_pump"))
 
 
 if __name__ == '__main__':
