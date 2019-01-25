@@ -66,7 +66,7 @@ def getPumpRelayStatus():
     if _db_conn.is_connected():
         print('Connected to MySQL database getPumpRelayStatus')
         _db_cursor = _db_conn.cursor()
-        query = "SELECT status FROM relays WHERE name = 'relaypump'"
+        query = "SELECT status FROM relays WHERE name = 'relay_pump'"
         _db_cursor.execute(query)
         row = _db_cursor.fetchone()
         result = row[0]
