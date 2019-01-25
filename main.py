@@ -8,7 +8,7 @@ import time
 from decimal import Decimal
 
 GPIO.setmode(GPIO.BCM)
-variable_checl = 1
+variable_check = 1
 pumpRelay = Relay("relay_pump", "close", 17)
 
 def connect():
@@ -220,8 +220,8 @@ if __name__ == '__main__':
         print(status)
         temperatureCheck = room.temp_min - variable_check;
         if (status == "close"):
-            if (getDeviceTemp(room.sensor_floor) < temperatureCheck):
+            if (getDeviceTemp(room.sensor_floor) > temperatureCheck):
                 openRelayLogic(getRelay(room.relay))
         else:
-            if (getDeviceTemp(room.sensor_floor) > room.temp_min):
+            if (getDeviceTemp(room.sensor_floor) < room.temp_min):
                 closeRelayLogic(getRelay(room.relay))
