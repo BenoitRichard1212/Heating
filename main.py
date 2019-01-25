@@ -207,7 +207,7 @@ def closeRelayLogic(p_relay):
 
 
 if __name__ == '__main__':
-#   pumpRelay = getPumpRelayStatus()
+    pumpRelay = getPumpRelayStatus()
     rooms = getAllRooms()
     for room in rooms:  
         relay = getRelay(room.relay)
@@ -215,6 +215,8 @@ if __name__ == '__main__':
         print(room.name)
         print(room.sensor_floor)
         print(getDeviceTemp(room.sensor_floor))
+        print(room.relay)
+        print(status)
 #        if (status == "close"):
 #            if (getDeviceTemp(room.sensor_floor) > room.temp_min):
 #                openRelayLogic(getRelay(room.relay))
