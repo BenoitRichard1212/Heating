@@ -23,13 +23,21 @@
 			$errors = [];
 			$errors['nameErr'] = "";
 			$errors['dupeErr'] = "";
+			$errors['valueErr'] = "";
 			$nameSetting = "";
+			$valueSetting = "";
 
 			if ($_SERVER["REQUEST_METHOD"] == "POST") {
 				if (empty($_POST["nameSetting"])) {
 					$errors['nameErr'] = "Le nom est requis.";
 				} else {
 					$nameSetting = $_POST["nameSetting"];
+				}
+
+				if (empty($_POST["valueSetting"])) {
+					$errors['valueErr'] = "La valeur est requise.";
+				} else {
+					$valueSetting = $_POST["valueSetting"];
 				}
 
 				foreach ($g_settings as $g) {
@@ -47,12 +55,12 @@
 			<a href="../index.php">Retour.</a><br /><br />
 			<form method="post" action="<?php echo $_SERVER["PHP_SELF"];?>">
 				<span class="error"><?php echo $errors['globalErr'];?></span><br /><br />
-				Titre : <input type="text" name="nameSetting"><br /><br />
 				<span class="error"><?php echo $errors['nameErr'];?></span><br /><br />
+				<span class="error"><?php echo $errors['valueErr'];?></span><br /><br />
 
-				Nom : <input type="text" name="nameSetting" value="Entrer le nom.">
+				Nom : <input type="text" name="nameSetting" value="">
 					  <br /><br />
-				Valeur : <input type="text" name="valueSetting" value="Entrer la valeur.">
+				Valeur : <input type="text" name="valueSetting" value="">
 
 				<input type="submit" name="submit" value="AddSetting">
 				<br /><br />
