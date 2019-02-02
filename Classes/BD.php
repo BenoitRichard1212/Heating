@@ -169,7 +169,7 @@
             if($result->num_rows === 0) exit('No rows');
             while($row = $result->fetch_assoc()) {
                 $globalSetting = new globalSetting($row['name'], $row['value']);
-                array_push($this->m_globalSettings, $globalSettings);
+                array_push($this->m_globalSettings, $globalSetting);
             }
             $stmt->close();
             
