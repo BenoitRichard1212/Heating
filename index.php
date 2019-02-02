@@ -12,6 +12,7 @@
 			<?php 
 					require("Classes/Room.php");
             		require("Classes/Sensor.php");
+            		require("Classes/globalSetting.php");
 					require("Classes/BD.php");
             
             		use Classes\Sensor;
@@ -33,26 +34,18 @@
 						foreach($rooms as $room) {
 								echo '<div class="row";>';
                     			echo '<div class="col-4";>Nom:'.$room->getName().'</div>';
-                    			echo '<div class="col-4";>Température min:'.$room->getTempMin().'</div>';
-                    			echo '<div class="col-4";>Sensor plancher:'.$room->getSensorFloor().'</div>';
-                    			echo '<div class="col-4";>Sensor mur:'.$room->getSensorWall().'</div>';
-                    			echo '<div class="col-4";>Relay:'.$room->getRelay().'</div>';
-                    			$sensor = $dbHeating->getSensor($room->getSensorWall());
-                    			echo '<div class="col-4";>Température:'.$sensor->getSensor().':'.$sensor->getTemperature().'</div>';
 								echo '</div>';
 								echo '<br /><br />';
 						}
 
-						foreach($rooms as $room) {
-					echo '<div class="row";>';
-					echo '<div class="col-4";>'.$room->getName().'</div>';
-					echo '<div class="col-4";>'.$room->getTempMin().'</div>';
-					echo '<div class="col-4";>'.$room->getSensorFloor().'</div>';
-					echo '<div class="col-4";>'.$room->getSensorWall().'</div>';
-					echo '<div class="col-4";>'.$room->getRelay().'</div>';
-					echo '</div>';
-					echo '<br /><br />';
-				}
+						echo '<div class="h1";>Paramètres</div>';
+						foreach($globalSettings as $globalSetting) {
+								echo '<div class="row";>';
+                    			echo '<div class="col-4";>Nom:'.$globalSetting->getName().'</div>';
+                    			echo '<div class="col-4";>Valeur:'.$globalSetting->getValue().'</div>';
+								echo '</div>';
+								echo '<br /><br />';
+						}
 			?>
 		</body>
 </html>

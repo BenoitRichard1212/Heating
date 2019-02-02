@@ -13,7 +13,8 @@
 	{
 		private $m_rooms = array();
         private $m_sensors = array();
-        private $m_relays = array();
+        private $m_relays = array();ç
+        private $m_globalSettings = array();
 		private $m_host = '192.168.0.131';
 		private $m_user = 'logger';
 		private $m_password = 'password';
@@ -155,6 +156,46 @@
             $this->fermetureConnectionBd();
             
             return $this->m_relays;
+        }
+
+        //Get all global settings
+        public function getAllGlobalSettings()
+        {
+            $this->connectionBd();
+            
+            $stmt = $this->m_conn->prepare("SELECT * FROM global_settings");
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if($result->num_rows === 0) exit('No rows');
+            while($row = $result->fetch_assoc()) {
+                $globalSetting = new globalSetting($row['name'], $row['value']);
+                array_push($this->m_globalSettings, $globalSettings);
+            }
+            $stmt->close();
+            
+            $this->fermetureConnectionBd();
+            
+            return $this->m_globalSettings;
+        }
+
+        //Get a single global setting.
+        public function getGlobalSetting($p_name)
+        {
+            $this->connectionBd();
+            $globalSetting = NULL;
+            
+            if($stmt = $this->m_conn->prepare("SELECT name, value FROM global_settings WHERE name = ?")) {
+                $stmt->bind_param("s", $p_name);
+                $stmt->execute();
+                $stmt->bind_result($name, $value);
+                while ($stmt->fetch()) {
+                    $globalSetting= new globalSettings($name, $value);
+                }
+                $stmt->close();
+            }
+            
+            $this->fermetureConnectionBd();
+            return $globalSetting;
         }
 	}
 	
