@@ -197,5 +197,20 @@
             $this->fermetureConnectionBd();
             return $globalSetting;
         }
+
+        //Add a global setting to the DB
+        public function addGlobalSetting($p_gs)
+        {
+            $this->connectionBd();
+            $globalSetting = NULL;
+            
+            if($stmt = $this->m_conn->prepare("INSERT INTO global_settings (`name`,`value`) VALUES (?, ?)")) {
+                $stmt->bind_param("si", $p_gs->getName(), $p_gs->getValue());
+                $stmt->execute();
+                $stmt->close();
+            }
+            
+            $this->fermetureConnectionBd();
+        }
 	}
 	

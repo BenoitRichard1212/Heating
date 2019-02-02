@@ -27,7 +27,7 @@
             		<a href="sensors.php">Status Sensors.</a>&nbsp;
             		<a href="relays.php">Status Relays.</a>&nbsp;
 					<a href="forms/addRoom.php">Add a room.</a>&nbsp;
-					<a href="forms/globalSetting.php">Global Configuration.</a><br /> <br />
+					<a href="forms/globalSetting.php">Change Global Settings.</a><br /> <br />
 
 			<?php
                 		echo '<div class="h1";>Pièces</div>';
