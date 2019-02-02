@@ -13,7 +13,7 @@
 	{
 		private $m_rooms = array();
         private $m_sensors = array();
-        private $m_relays = array();ç
+        private $m_relays = array();
         private $m_globalSettings = array();
 		private $m_host = '192.168.0.131';
 		private $m_user = 'logger';
