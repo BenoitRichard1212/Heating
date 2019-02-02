@@ -12,7 +12,7 @@
 			<?php 
 					require("Classes/Room.php");
             		require("Classes/Sensor.php");
-            		require("Classes/globalSetting.php");
+            		require("Classes/GlobalSetting.php");
 					require("Classes/BD.php");
             
             		use Classes\Sensor;
@@ -21,6 +21,7 @@
 
 					$dbHeating = new BD();
 					$rooms = $dbHeating->getAllRooms();
+					$globalSettings = $dbHeating->getAllGlobalSettings();
 			?>
 
             		<a href="sensors.php">Status Sensors.</a>&nbsp;
