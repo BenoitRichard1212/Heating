@@ -10,28 +10,28 @@
 		</head>
 		<body>
 			<?php 
-			require("Classes/Room.php");
+					require("Classes/Room.php");
             		require("Classes/Sensor.php");
-			require("Classes/BD.php");
+					require("Classes/BD.php");
             
             		use Classes\Sensor;
-			use Classes\Room;
-			use Classes\BD;
+					use Classes\Room;
+					use Classes\BD;
 
-			$dbHeating = new BD();
-			$rooms = $dbHeating->getAllRooms();
+					$dbHeating = new BD();
+					$rooms = $dbHeating->getAllRooms();
 			?>
 
             		<a href="sensors.php">Status Sensors.</a>&nbsp;
             		<a href="relays.php">Status Relays.</a>&nbsp;
-			<a href="forms/addRoom.php">Add a room.</a>&nbsp;
-			<a href="forms/globalSetting.php">Global Configuration.</a><br /> <br />
+					<a href="forms/addRoom.php">Add a room.</a>&nbsp;
+					<a href="forms/globalSetting.php">Global Configuration.</a><br /> <br />
 
 			<?php
                 		echo '<div class="h1";>Pièces</div>';
                 		echo '<br /><br />';
-				foreach($rooms as $room) {
-					echo '<div class="row";>';
+						foreach($rooms as $room) {
+								echo '<div class="row";>';
                     			echo '<div class="col-4";>Nom:'.$room->getName().'</div>';
                     			echo '<div class="col-4";>Température min:'.$room->getTempMin().'</div>';
                     			echo '<div class="col-4";>Sensor plancher:'.$room->getSensorFloor().'</div>';
@@ -39,6 +39,17 @@
                     			echo '<div class="col-4";>Relay:'.$room->getRelay().'</div>';
                     			$sensor = $dbHeating->getSensor($room->getSensorWall());
                     			echo '<div class="col-4";>Température:'.$sensor->getSensor().':'.$sensor->getTemperature().'</div>';
+								echo '</div>';
+								echo '<br /><br />';
+						}
+
+						foreach($rooms as $room) {
+					echo '<div class="row";>';
+					echo '<div class="col-4";>'.$room->getName().'</div>';
+					echo '<div class="col-4";>'.$room->getTempMin().'</div>';
+					echo '<div class="col-4";>'.$room->getSensorFloor().'</div>';
+					echo '<div class="col-4";>'.$room->getSensorWall().'</div>';
+					echo '<div class="col-4";>'.$room->getRelay().'</div>';
 					echo '</div>';
 					echo '<br /><br />';
 				}
