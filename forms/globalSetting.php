@@ -42,7 +42,6 @@
 					$globalSetting = new GlobalSetting($_POST['nameSetting'], $_POST['valueSetting']);
 					$dbHeating->addGlobalSetting($globalSetting);
 					}
-				}
 			}
 			?>
 			<a href="../index.php">Retour.</a><br /><br />
