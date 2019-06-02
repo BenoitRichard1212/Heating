@@ -2,7 +2,8 @@
 
 TO DO's
 
- - In DB, add the device_id field, for DHT22 just put 1-2-3-etc. Use this to store the id of ds18b20.
- - Change the main code to check temp of ds18b20 and not DHT22. (Should check sensor by id.)
- - Store the list of ID somewhere.
- - Add the update query for ds18b20.
+ - Add/Delete/Update function for (Rooms, Sensors, Relays, Global Settings.)
+ - Validation for Addition/Update.
+ - When you click a name you go to the room page. You can the click on update or delete.
+ - For Sensors/Relays/Global you need to go in their respective pages.
+ - Add sensor/relays as a list for rooms choice, when creating.

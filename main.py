@@ -7,10 +7,12 @@ from mysql.connector import Error
 import RPi.GPIO as GPIO
 import time
 from decimal import Decimal
+import datetime
 
 GPIO.setmode(GPIO.BCM)
 variable_check = 1
 pumpRelay = Relay("relay_pump", "close", 17)
+logging.baseConifg(filename="/var/log/Heating/sensors_log.txt", level=logging.INFO)
 
 def connect():
     _db_conn = mysql.connector.connect(host='192.168.0.131',
@@ -18,10 +20,10 @@ def connect():
                                        user='logger',
                                        password='password')
     if _db_conn.is_connected():
-        print('Connected to MySQL database')
+        logging.info('Connected to MySQL database')
         _db_cursor = _db_conn.cursor()
     else:
-        print("Could not connect to Database closeRelay")
+        logger.error("Could not connect to Database closeRelay")
 
 
 def closeRelay(p_relay):
@@ -220,10 +222,26 @@ def openRelayLogic(p_relay):
     pumpStatus = getPumpRelayStatus()
 
     if (pumpStatus == "close"):
+        logging.info(datetime.datetime.now() + ' OPENING PUMP RELAY')
         openRelay(getRelay("relay_pump"))
         time.sleep(2);
+        logging.info(datetime.datetime.now() + ' OPENING ' + p_relay)
         openRelay(p_relay)
     else:
+        logging.info(datetime.datetime.now() + ' OPENING ' + p_relay)
+        openRelay(p_relay)
+
+def openRelayLogicCooling(p_relay):
+    pumpStatus = getPumpRelayStatus()
+
+    if (pumpStatus == "close"):
+        logging.info(datetime.datetime.now() + ' OPENING PUMP RELAY')
+        openRelay(getRelay("relay_pump"))
+        time.sleep(2);
+        logging.info(datetime.datetime.now() + ' OPENING ' + p_relay)
+        openRelay(p_relay)
+    else:
+        logging.info(datetime.datetime.now() + ' OPENING ' + p_relay)
         openRelay(p_relay)
 
 
@@ -232,6 +250,7 @@ def pumpOnlyOpen():
     relays = getAllRelays()
     for relay in relays:
         if (relay.name != "relay_pump" and relay.status == "open"):
+            logging.info(datetime.datetime.now() + ' Pump relay is not the only one opened, staying open for the other relays.')
             closePump = False
     return closePump
 
@@ -240,10 +259,37 @@ def closeRelayLogic(p_relay):
     relays = getAllRelays()
     status = getPumpRelayStatus()
 
+    if (pumpOnlyOpen() == True):
+        logging.info(datetime.datetime.now() + ' CLOSING PUMP RELAY')
+        closeRelay(getRelay("relay_pump"))
+
     closeRelay(p_relay)
 
+def closeRelayLogicCooling(p_relay):
+    relays = getAllRelays()
+    status = getPumpRelayStatus()
+
     if (pumpOnlyOpen() == True):
+        logging.info(datetime.datetime.now() + ' CLOSING PUMP RELAY')
         closeRelay(getRelay("relay_pump"))
+
+    logging.info(datetime.datetime.now() + ' CLOSING ' + p_relay)
+    closeRelay(p_relay)
+
+
+def loggerCheck(p_room_name, p_sensor_temp, p_desired_temp, p_status):
+    logging.info('Treating room : ' + p_room_name)
+    logging.info('Status of the pump to the room : ' p_status)
+    if (p_status == "close"):
+        if (p_sensor_temp > p_desired_temp):
+            logging.info(datetime.datetime.now() + ' Status of the room is CLOSED, temps are HIGHER then desired temp. Relays should be OPENING.')
+        else:
+            logging.info(datetime.datetime.now() + ' Status of the room is CLOSED, temps are within normal parameters. Relays should stay the SAME')
+    else:
+        if (p_sensor_temp < p_desired_temp):
+            logging.info(datetime.datetime.now() + ' Status of the room is OPENED, temps are LOWER then desired temp. Relays should be CLOSING.')
+        else:
+            logging.info(datetime.datetime.now() + ' Status of the room is OPENED, temps are within normal parameters, Relays should stay the SAME.')
 
 
 if __name__ == '__main__':
@@ -252,15 +298,20 @@ if __name__ == '__main__':
     for room in rooms:  
         relay = getRelay(room.relay)
         status = relay.status
-        print(room.name)
-        print(room.sensor_floor)
-        print(getDeviceTemp(room.sensor_floor))
-        print(room.relay)
-        print(status)
         temperatureCheck = room.temp_min - variable_check;
+        loggerCheck(room.name, room.sensor_floor, temperatureCheck, room.status)
+        #Inverting logic for cooling system. Swapped openRelay/closeRelay function for Cooling.
         if (status == "close"):
             if (getDeviceTemp(room.sensor_floor) > temperatureCheck):
-                openRelayLogic(getRelay(room.relay))
+                logging.info(datetime.datetime.now() + ' OPENING RELAYS ( TEMPERATURE > MIN. TEMP + TEMERATURE CHECK.')
+                logging.info('Current temperature : ' + room.sensor_floor)
+                logging.info('Minimum temp. : ' + room.temp_min)
+                logging.info('Variable temp check: ' + variable_check)
+                openRelayLogicCooling(getRelay(room.relay))
         else:
             if (getDeviceTemp(room.sensor_floor) < room.temp_min):
-                closeRelayLogic(getRelay(room.relay))
+                logging.info(datetime.datetime.now() + ' CLOSING RELAYS ( TEMPERATURE < MIN. TEMP + TEMERATURE CHECK.')
+                logging.info('Current temperature : ' + room.sensor_floor)
+                logging.info('Minimum temp. : ' + room.temp_min)
+                logging.info('Variable temp check: ' + variable_check)
+                closeRelayLogicCooling(getRelay(room.relay))

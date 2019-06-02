@@ -1,76 +1,79 @@
 <!DOCTYPE html>
 	<html>
 		<head>
-			<link rel="stylesheet" type="text/css" href="../css/main.css">
-			<title>Room - Add a room.</title>
+			<title>Rooms</title>
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		</head>
 		<body>
 			<?php
-			require("../classes/Room.php");
-			require("../classes/BD.php");
+			
+			require("../Classes/Sensor.php");
+			require("../Classes/Relay.php");
+			require("../Classes/Room.php");
+			require("../Classes/GlobalSetting.php");
+			require("../Classes/BD.php");
 
-			use classes\Room;
-			use classes\BD;
+			use Classes\Sensor;
+			use Classes\Room;
+			use Classes\Relay;
+			use Classes\GlobalSetting;
+			use Classes\BD;
 
 			$dbHeating = new BD();
 
-			$rooms = $dbHeating->getAllRooms();
+			$g_settings = $dbHeating->getAllGlobalSettings();
+			$relays = $dbHeating->getAllRelays();
+			$sensors = $dbHeating->getAllSensors();
+			$rooms = $dbRooms->getAllRooms();
 
 			$errors = [];
-			$errors['nomErr'] = "";
-			$errors['prenomErr'] = "";
-			$errors['globalErr'] = "";
-			$nomAuteur = $prenomAuteur = "";
+			$errors['nameErr'] = "";
+			$errors['dupeErr'] = "";
+			$errors['valueErr'] = "";
+			$nameSetting = "";
+			$valueSetting = "";
 
 			if ($_SERVER["REQUEST_METHOD"] == "POST") {
-				if (empty($_POST["nomAuteur"])) {
-					$errors['nomErr'] = "Le nom est requis.";
+				if (empty($_POST["nameSetting"])) {
+					$errors['nameErr'] = "Le nom est requis.";
 				} else {
-					if (strlen($_POST["nomAuteur"]) < 3 || strlen($_POST["nomAuteur"]) > 20 ) {
-						$errors['nomErr'] = "Le nom doit être entre 3 et 20 charactères.";
-					} else {
-						$nomAuteur = $_POST["nomAuteur"];
-					}
+					$nameSetting = $_POST["nameSetting"];
 				}
 
-				if (empty($_POST["prenomAuteur"])) {
-					$errors['prenomErr'] = "Le prénom est requis.";
+				if (empty($_POST["valueSetting"])) {
+					$errors['valueErr'] = "La valeur est requise.";
 				} else {
-					if (strlen($_POST["prenomAuteur"]) < 3 || strlen($_POST["prenomAuteur"]) > 20 ) {
-						$errors['prenomErr'] = "Le prénom doit être entre 3 et 20 charactères.";
-					} else {
-						$prenomAuteur = $_POST["prenomAuteur"];
+					$valueSetting = $_POST["valueSetting"];
+				}
+
+				foreach ($g_settings as $g) {
+					if ($g->getName() == $_POST["nameSetting"]) {
+						$errors['dupeErr'] = "Le setting existe déjà.";
 					}
 				}
 
-				foreach ($auteurs as $auteur) {
-					if ($auteur->getNomAuteur() == $_POST["nomAuteur"] && $auteur->getPrenomAuteur() == $_POST["prenomAuteur"]) {
-						$errors['globalErr'] = "L'auteur existe déjà.";
+				if($errors['nameErr'] == "" && $errors['dupeErr'] == "") {
+					$globalSetting = new GlobalSetting($_POST['nameSetting'], $_POST['valueSetting']);
+					$dbHeating->addGlobalSetting($globalSetting);
 					}
-				}
-
-				if($errors['nomErr'] == "" && $errors['prenomErr'] == "" && $errors['globalErr'] == "") {
-					$auteur = new Auteur($_POST['nomAuteur'], $_POST['prenomAuteur']);
-					$dbBibli->sauvegarderAuteur($auteur);
-				}
 			}
 			?>
-			<a href="../index.php">Go Back.</a><br /><br />
+			<a href="../index.php">Retour.</a><br /><br />
 			<form method="post" action="<?php echo $_SERVER["PHP_SELF"];?>">
 				<span class="error"><?php echo $errors['globalErr'];?></span><br /><br />
-				Room Name: <input type="text" name="roomName"><br /><br />
-				<span class="error"><?php echo $errors['roomNameErr'];?></span><br /><br />
-				Maximum Temperature: <input type="text" name="prenomAuteur"><br /><br />
-				<span class="error"><?php echo $errors['prenomErr'];?></span><br /><br />
-				Minimum Temperature: <input type="text" name="nomAuteur"><br /><br />
-				<span class="error"><?php echo $errors['nomErr'];?></span><br /><br />
-				Sensor Wall Name: <input type="text" name="prenomAuteur"><br /><br />
-				<span class="error"><?php echo $errors['prenomErr'];?></span><br /><br />
-				Sensor Floor Name: <input type="text" name="nomAuteur"><br /><br />
-				<span class="error"><?php echo $errors['nomErr'];?></span><br /><br />
-				Relay Name: <input type="text" name="prenomAuteur"><br /><br />
-				<span class="error"><?php echo $errors['prenomErr'];?></span><br /><br />
-				<input type="submit" name="submit" value="Add">
+				<span class="error"><?php echo $errors['nameErr'];?></span><br /><br />
+				<span class="error"><?php echo $errors['valueErr'];?></span><br /><br />
+
+				Nom : <input type="text" name="nameSetting" value="">
+					  <br /><br />
+				Valeur : <input type="text" name="valueSetting" value="">
+
+				<input type="submit" name="submit" value="AddSetting">
+				<br /><br />
 			</form>
 		</body>
 </html>
