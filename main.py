@@ -294,7 +294,7 @@ def loggerCheck(p_room_name, p_sensor_temp, p_desired_temp, p_status):
 
 if __name__ == '__main__':
     #CLIMATISATION
-    if (modeClim == true):
+    if (modeClim == 1):
         pumpRelay = getPumpRelayStatus()
         rooms = getAllRooms()
         for room in rooms:  
