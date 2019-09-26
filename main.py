@@ -293,25 +293,50 @@ def loggerCheck(p_room_name, p_sensor_temp, p_desired_temp, p_status):
 
 
 if __name__ == '__main__':
-    pumpRelay = getPumpRelayStatus()
-    rooms = getAllRooms()
-    for room in rooms:  
-        relay = getRelay(room.relay)
-        status = relay.status
-        temperatureCheck = room.temp_min - variable_check;
-        loggerCheck(room.name, room.sensor_floor, temperatureCheck, room.status)
-        #Inverting logic for cooling system. Swapped openRelay/closeRelay function for Cooling.
-        if (status == "close"):
-            if (getDeviceTemp(room.sensor_floor) > temperatureCheck):
-                logging.info(datetime.datetime.now() + ' OPENING RELAYS ( TEMPERATURE > MIN. TEMP + TEMERATURE CHECK.')
-                logging.info('Current temperature : ' + room.sensor_floor)
-                logging.info('Minimum temp. : ' + room.temp_min)
-                logging.info('Variable temp check: ' + variable_check)
-                openRelayLogicCooling(getRelay(room.relay))
-        else:
-            if (getDeviceTemp(room.sensor_floor) < room.temp_min):
-                logging.info(datetime.datetime.now() + ' CLOSING RELAYS ( TEMPERATURE < MIN. TEMP + TEMERATURE CHECK.')
-                logging.info('Current temperature : ' + room.sensor_floor)
-                logging.info('Minimum temp. : ' + room.temp_min)
-                logging.info('Variable temp check: ' + variable_check)
-                closeRelayLogicCooling(getRelay(room.relay))
+    #CLIMATISATION
+    if (modeClim == true):
+        pumpRelay = getPumpRelayStatus()
+        rooms = getAllRooms()
+        for room in rooms:  
+            relay = getRelay(room.relay)
+            status = relay.status
+            temperatureCheck = room.temp_min - variable_check;
+            loggerCheck(room.name, room.sensor_floor, temperatureCheck, room.status)
+            #Inverting logic for cooling system. Swapped openRelay/closeRelay function for Cooling.
+            if (status == "close"):
+                if (getDeviceTemp(room.sensor_floor) > temperatureCheck):
+                    logging.info(datetime.datetime.now() + ' OPENING RELAYS ( TEMPERATURE > MIN. TEMP + TEMERATURE CHECK.')
+                    logging.info('Current temperature : ' + room.sensor_floor)
+                    logging.info('Minimum temp. : ' + room.temp_min)
+                    logging.info('Variable temp check: ' + variable_check)
+                    openRelayLogicCooling(getRelay(room.relay))
+            else:
+                if (getDeviceTemp(room.sensor_floor) < room.temp_min):
+                    logging.info(datetime.datetime.now() + ' CLOSING RELAYS ( TEMPERATURE < MIN. TEMP + TEMERATURE CHECK.')
+                    logging.info('Current temperature : ' + room.sensor_floor)
+                    logging.info('Minimum temp. : ' + room.temp_min)
+                    logging.info('Variable temp check: ' + variable_check)
+                    closeRelayLogicCooling(getRelay(room.relay))
+    else:
+        #CHAUFFAGE
+        pumpRelay = getPumpRelayStatus()
+        rooms = getAllRooms()
+        for room in rooms:  
+            relay = getRelay(room.relay)
+            status = relay.status
+            temperatureCheck = room.temp_min - variable_check;
+            loggerCheck(room.name, room.sensor_floor, temperatureCheck, room.status)
+            if (status == "close"):
+                if (getDeviceTemp(room.sensor_floor) < temperatureCheck):
+                    logging.info(datetime.datetime.now() + ' OPENING RELAYS ( TEMPERATURE < MIN. TEMP + TEMERATURE CHECK.')
+                    logging.info('Current temperature : ' + room.sensor_floor)
+                    logging.info('Minimum temp. : ' + room.temp_min)
+                    logging.info('Variable temp check: ' + variable_check)
+                    openRelayLogic(getRelay(room.relay))
+            else:
+                if (getDeviceTemp(room.sensor_floor) > room.temp_min):
+                    logging.info(datetime.datetime.now() + ' CLOSING RELAYS ( TEMPERATURE > MIN. TEMP + TEMERATURE CHECK.')
+                    logging.info('Current temperature : ' + room.sensor_floor)
+                    logging.info('Minimum temp. : ' + room.temp_min)
+                    logging.info('Variable temp check: ' + variable_check)
+                    closeRelayLogic(getRelay(room.relay))
