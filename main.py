@@ -223,26 +223,26 @@ def openRelayLogic(p_relay):
     pumpStatus = getPumpRelayStatus()
 
     if (pumpStatus == "close"):
-        logging.info(datetime.datetime.now() + ' OPENING PUMP RELAY')
+        logging.info(' OPENING PUMP RELAY')
         openRelay(getRelay("relay_pump"))
         time.sleep(2);
-        logging.info(datetime.datetime.now() + ' OPENING ' + p_relay)
+        logging.info(' OPENING ' + p_relay)
         openRelay(p_relay)
     else:
-        logging.info(datetime.datetime.now() + ' OPENING ' + p_relay)
+        logging.info(' OPENING ' + p_relay)
         openRelay(p_relay)
 
 def openRelayLogicCooling(p_relay):
     pumpStatus = getPumpRelayStatus()
 
     if (pumpStatus == "close"):
-        logging.info(datetime.datetime.now() + ' OPENING PUMP RELAY')
+        logging.info(' OPENING PUMP RELAY')
         openRelay(getRelay("relay_pump"))
         time.sleep(2);
-        logging.info(datetime.datetime.now() + ' OPENING ' + p_relay)
+        logging.info(' OPENING ' + p_relay)
         openRelay(p_relay)
     else:
-        logging.info(datetime.datetime.now() + ' OPENING ' + p_relay)
+        logging.info(' OPENING ' + p_relay)
         openRelay(p_relay)
 
 
@@ -251,7 +251,7 @@ def pumpOnlyOpen():
     relays = getAllRelays()
     for relay in relays:
         if (relay.name != "relay_pump" and relay.status == "open"):
-            logging.info(datetime.datetime.now() + ' Pump relay is not the only one opened, staying open for the other relays.')
+            logging.info(' Pump relay is not the only one opened, staying open for the other relays.')
             closePump = False
     return closePump
 
@@ -261,7 +261,7 @@ def closeRelayLogic(p_relay):
     status = getPumpRelayStatus()
 
     if (pumpOnlyOpen() == True):
-        logging.info(datetime.datetime.now() + ' CLOSING PUMP RELAY')
+        logging.info(' CLOSING PUMP RELAY')
         closeRelay(getRelay("relay_pump"))
 
     closeRelay(p_relay)
@@ -271,10 +271,10 @@ def closeRelayLogicCooling(p_relay):
     status = getPumpRelayStatus()
 
     if (pumpOnlyOpen() == True):
-        logging.info(datetime.datetime.now() + ' CLOSING PUMP RELAY')
+        logging.info(' CLOSING PUMP RELAY')
         closeRelay(getRelay("relay_pump"))
 
-    logging.info(datetime.datetime.now() + ' CLOSING ' + p_relay)
+    logging.info(' CLOSING ' + p_relay)
     closeRelay(p_relay)
 
 
@@ -283,14 +283,14 @@ def loggerCheck(p_room_name, p_sensor_temp, p_desired_temp):
  #   logging.info('Status of the pump to the room : ' + p_status)
  #   if (p_status == "close"):
     if (p_sensor_temp > p_desired_temp):
-        logging.info(datetime.datetime.now() + ' Status of the room is CLOSED, temps are HIGHER then desired temp. Relays should be OPENING.')
+        logging.info(' Status of the room is CLOSED, temps are HIGHER then desired temp. Relays should be OPENING.')
     else:
-        logging.info(datetime.datetime.now() + ' Status of the room is CLOSED, temps are within normal parameters. Relays should stay the SAME')
+        logging.info(' Status of the room is CLOSED, temps are within normal parameters. Relays should stay the SAME')
  #   else:
     if (p_sensor_temp < p_desired_temp):
-        logging.info(datetime.datetime.now() + ' Status of the room is OPENED, temps are LOWER then desired temp. Relays should be CLOSING.')
+        logging.info(' Status of the room is OPENED, temps are LOWER then desired temp. Relays should be CLOSING.')
     else:
-        logging.info(datetime.datetime.now() + ' Status of the room is OPENED, temps are within normal parameters, Relays should stay the SAME.')
+        logging.info(' Status of the room is OPENED, temps are within normal parameters, Relays should stay the SAME.')
 
 
 if __name__ == '__main__':
@@ -307,14 +307,14 @@ if __name__ == '__main__':
             #Inverting logic for cooling system. Swapped openRelay/closeRelay function for Cooling.
             if (status == "close"):
                 if (getDeviceTemp(room.sensor_floor) > temperatureCheck):
-                    logging.info(datetime.datetime.now() + ' OPENING RELAYS ( TEMPERATURE > MIN. TEMP + TEMERATURE CHECK.')
+                    logging.info(' OPENING RELAYS ( TEMPERATURE > MIN. TEMP + TEMERATURE CHECK.')
                     logging.info('Current temperature : ' + room.sensor_floor)
                     logging.info('Minimum temp. : ' + room.temp_min)
                     logging.info('Variable temp check: ' + variable_check)
                     openRelayLogicCooling(getRelay(room.relay))
             else:
                 if (getDeviceTemp(room.sensor_floor) < room.temp_min):
-                    logging.info(datetime.datetime.now() + ' CLOSING RELAYS ( TEMPERATURE < MIN. TEMP + TEMERATURE CHECK.')
+                    logging.info(' CLOSING RELAYS ( TEMPERATURE < MIN. TEMP + TEMERATURE CHECK.')
                     logging.info('Current temperature : ' + room.sensor_floor)
                     logging.info('Minimum temp. : ' + room.temp_min)
                     logging.info('Variable temp check: ' + variable_check)
@@ -330,14 +330,14 @@ if __name__ == '__main__':
             loggerCheck(room.name, room.sensor_floor, temperatureCheck)
             if (status == "close"):
                 if (getDeviceTemp(room.sensor_floor) < temperatureCheck):
-                    logging.info(datetime.datetime.now() + ' OPENING RELAYS ( TEMPERATURE < MIN. TEMP + TEMERATURE CHECK.')
+                    logging.info(' OPENING RELAYS ( TEMPERATURE < MIN. TEMP + TEMERATURE CHECK.')
                     logging.info('Current temperature : ' + room.sensor_floor)
                     logging.info('Minimum temp. : ' + room.temp_min)
                     logging.info('Variable temp check: ' + variable_check)
                     openRelayLogic(getRelay(room.relay))
             else:
                 if (getDeviceTemp(room.sensor_floor) > room.temp_min):
-                    logging.info(datetime.datetime.now() + ' CLOSING RELAYS ( TEMPERATURE > MIN. TEMP + TEMERATURE CHECK.')
+                    logging.info(' CLOSING RELAYS ( TEMPERATURE > MIN. TEMP + TEMERATURE CHECK.')
                     logging.info('Current temperature : ' + room.sensor_floor)
                     logging.info('Minimum temp. : ' + room.temp_min)
                     logging.info('Variable temp check: ' + variable_check)
