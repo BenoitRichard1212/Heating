@@ -1,3 +1,8 @@
+70.52.38.147 (jo house)
+192.168.2.34 (db + site + sensor)
+192.168.2.174 (etage sensor)
+192.168.2.131 (relays)
+
 Ajouter clim vs chauffage, checker DB, mode chauffage, dans glovbal settings on/off.
 
 Check each room,
