@@ -282,15 +282,15 @@ def loggerCheck(p_room_name, p_sensor_temp, p_desired_temp):
     logging.info('Treating room : ' + p_room_name)
  #   logging.info('Status of the pump to the room : ' + p_status)
  #   if (p_status == "close"):
-        if (p_sensor_temp > p_desired_temp):
-            logging.info(datetime.datetime.now() + ' Status of the room is CLOSED, temps are HIGHER then desired temp. Relays should be OPENING.')
-        else:
-            logging.info(datetime.datetime.now() + ' Status of the room is CLOSED, temps are within normal parameters. Relays should stay the SAME')
+     if (p_sensor_temp > p_desired_temp):
+         logging.info(datetime.datetime.now() + ' Status of the room is CLOSED, temps are HIGHER then desired temp. Relays should be OPENING.')
+     else:
+         logging.info(datetime.datetime.now() + ' Status of the room is CLOSED, temps are within normal parameters. Relays should stay the SAME')
  #   else:
-        if (p_sensor_temp < p_desired_temp):
-            logging.info(datetime.datetime.now() + ' Status of the room is OPENED, temps are LOWER then desired temp. Relays should be CLOSING.')
-        else:
-            logging.info(datetime.datetime.now() + ' Status of the room is OPENED, temps are within normal parameters, Relays should stay the SAME.')
+     if (p_sensor_temp < p_desired_temp):
+         logging.info(datetime.datetime.now() + ' Status of the room is OPENED, temps are LOWER then desired temp. Relays should be CLOSING.')
+     else:
+         logging.info(datetime.datetime.now() + ' Status of the room is OPENED, temps are within normal parameters, Relays should stay the SAME.')
 
 
 if __name__ == '__main__':
