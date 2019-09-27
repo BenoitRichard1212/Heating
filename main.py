@@ -16,7 +16,7 @@ pumpRelay = Relay("relay_pump", "close", 17)
 logging.basicConfig(filename="/var/log/Heating/sensors_log.txt", level=logging.INFO)
 
 def connect():
-    _db_conn = mysql.connector.connect(host='192.168.0.131',
+    _db_conn = mysql.connector.connect(host='192.168.2.34',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
@@ -28,7 +28,7 @@ def connect():
 
 
 def closeRelay(p_relay):
-    _db_conn = mysql.connector.connect(host='192.168.0.131',
+    _db_conn = mysql.connector.connect(host='192.168.2.34',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
@@ -46,7 +46,7 @@ def closeRelay(p_relay):
 
 
 def openRelay(p_relay):
-    _db_conn = mysql.connector.connect(host='192.168.0.131',
+    _db_conn = mysql.connector.connect(host='192.168.2.34',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
@@ -64,7 +64,7 @@ def openRelay(p_relay):
 
 
 def getPumpRelayStatus():
-    _db_conn = mysql.connector.connect(host='192.168.0.131',
+    _db_conn = mysql.connector.connect(host='192.168.2.34',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
@@ -82,7 +82,7 @@ def getPumpRelayStatus():
 
 
 def getRelay(name):
-    _db_conn = mysql.connector.connect(host='192.168.0.131',
+    _db_conn = mysql.connector.connect(host='192.168.2.34',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
@@ -102,7 +102,7 @@ def getRelay(name):
 
 def getAllRelays():
     relays = []
-    _db_conn = mysql.connector.connect(host='192.168.0.131',
+    _db_conn = mysql.connector.connect(host='192.168.2.34',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
@@ -124,7 +124,7 @@ def getAllRelays():
 
 def getAllRooms():
     rooms = []
-    _db_conn = mysql.connector.connect(host='192.168.0.131',
+    _db_conn = mysql.connector.connect(host='192.168.2.34',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
@@ -145,7 +145,7 @@ def getAllRooms():
 
 #def getAllGlobalSettings():
 #    globalSettings = []
-#    _db_conn = mysql.connector.connect(host='192.168.0.131',
+#    _db_conn = mysql.connector.connect(host='192.168.2.34',
 #                                       database='temperatures',
 #                                       user='logger',
 #                                       password='password')
@@ -165,7 +165,7 @@ def getAllRooms():
 #        print("Could not connect to Database getAllGlobalSettings")
 
 #def getGlobalSetting(name):
-#    _db_conn = mysql.connector.connect(host='192.168.0.131',
+#    _db_conn = mysql.connector.connect(host='192.168.2.34',
 #                                       database='temperatures',
 #                                       user='logger',
 #                                       password='password')
@@ -183,7 +183,7 @@ def getAllRooms():
 
 
 def getSensorTemp(name):
-    _db_conn = mysql.connector.connect(host='192.168.0.131',
+    _db_conn = mysql.connector.connect(host='192.168.2.34',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
@@ -201,7 +201,7 @@ def getSensorTemp(name):
         print("Could not connect to Database getSensorTemp")
 
 def getDeviceTemp(name):
-    _db_conn = mysql.connector.connect(host='192.168.0.131',
+    _db_conn = mysql.connector.connect(host='192.168.2.34',
                                        database='temperatures',
                                        user='logger',
                                        password='password')
