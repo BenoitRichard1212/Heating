@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from relay import Relay
 from room import Room
-from gobalSetting import GlobalSetting
+#from gobalSetting import GlobalSetting
 import mysql.connector
 from mysql.connector import Error
 import RPi.GPIO as GPIO
@@ -142,43 +142,43 @@ def getAllRooms():
     else:
         print("Could not connect to Database getAllRooms")
 
-def getAllGlobalSettings():
-    globalSettings = []
-    _db_conn = mysql.connector.connect(host='192.168.0.131',
-                                       database='temperatures',
-                                       user='logger',
-                                       password='password')
-    if _db_conn.is_connected():
-        print('Connected to MySQL database getAllGlobalSettings')
-        _db_cursor = _db_conn.cursor()
-        query = "SELECT * FROM global_settings"
-        _db_cursor.execute(query)
-        row = _db_cursor.fetchone()
-        while row is not None:
-            globalSetting = GlobalSetting(row[0], row[1])
-            globalSettings.append(globalSetting)
-            row = _db_cursor.fetchone()
-        _db_conn.close()   
-        return globalSettings
-    else:
-        print("Could not connect to Database getAllGlobalSettings")
+#def getAllGlobalSettings():
+#    globalSettings = []
+#    _db_conn = mysql.connector.connect(host='192.168.0.131',
+#                                       database='temperatures',
+#                                       user='logger',
+#                                       password='password')
+#    if _db_conn.is_connected():
+#        print('Connected to MySQL database getAllGlobalSettings')
+#        _db_cursor = _db_conn.cursor()
+#        query = "SELECT * FROM global_settings"
+#        _db_cursor.execute(query)
+#        row = _db_cursor.fetchone()
+#        while row is not None:
+#            globalSetting = GlobalSetting(row[0], row[1])
+#            globalSettings.append(globalSetting)
+#            row = _db_cursor.fetchone()
+#        _db_conn.close()   
+#        return globalSettings
+#    else:
+#        print("Could not connect to Database getAllGlobalSettings")
 
-def getGlobalSetting(name):
-    _db_conn = mysql.connector.connect(host='192.168.0.131',
-                                       database='temperatures',
-                                       user='logger',
-                                       password='password')
-    if _db_conn.is_connected():
-        print('Connected to MySQL database getGloablSetting')
-        _db_cursor = _db_conn.cursor()
-        query = "SELECT * FROM global_settings WHERE name = '%s'" % (name)
-        _db_cursor.execute(query)
-        row = _db_cursor.fetchone()
-        globalSetting = GlobalSetting(row[0], row[1])
-        _db_conn.close()
-        return globalSetting
-    else:
-        print("Could not connect to Database getRelay")
+#def getGlobalSetting(name):
+#    _db_conn = mysql.connector.connect(host='192.168.0.131',
+#                                       database='temperatures',
+#                                       user='logger',
+#                                       password='password')
+#    if _db_conn.is_connected():
+#        print('Connected to MySQL database getGloablSetting')
+#        _db_cursor = _db_conn.cursor()
+#        query = "SELECT * FROM global_settings WHERE name = '%s'" % (name)
+#        _db_cursor.execute(query)
+#        row = _db_cursor.fetchone()
+#        globalSetting = GlobalSetting(row[0], row[1])
+#        _db_conn.close()
+#        return globalSetting
+#    else:
+#        print("Could not connect to Database getRelay")
 
 
 def getSensorTemp(name):
@@ -294,6 +294,7 @@ def loggerCheck(p_room_name, p_sensor_temp, p_desired_temp, p_status):
 
 if __name__ == '__main__':
     #CLIMATISATION
+    modeClim = 0
     if (modeClim == 1):
         pumpRelay = getPumpRelayStatus()
         rooms = getAllRooms()
