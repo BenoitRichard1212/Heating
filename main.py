@@ -8,6 +8,7 @@ import RPi.GPIO as GPIO
 import time
 from decimal import Decimal
 import datetime
+import logging
 
 GPIO.setmode(GPIO.BCM)
 variable_check = 1
