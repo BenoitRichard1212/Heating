@@ -279,7 +279,7 @@ def closeRelayLogicCooling(p_relay):
 
 def loggerCheck(p_room_name, p_sensor_temp, p_desired_temp, p_status):
     logging.info('Treating room : ' + p_room_name)
-    logging.info('Status of the pump to the room : ' p_status)
+    logging.info('Status of the pump to the room : ' + p_status)
     if (p_status == "close"):
         if (p_sensor_temp > p_desired_temp):
             logging.info(datetime.datetime.now() + ' Status of the room is CLOSED, temps are HIGHER then desired temp. Relays should be OPENING.')
