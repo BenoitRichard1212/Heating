@@ -278,9 +278,9 @@ def closeRelayLogicCooling(p_relay):
     closeRelay(p_relay)
 
 
-def loggerCheck(p_room_name, p_sensor_temp, p_desired_temp, p_status):
+def loggerCheck(p_room_name, p_sensor_temp, p_desired_temp):
     logging.info('Treating room : ' + p_room_name)
-    logging.info('Status of the pump to the room : ' + p_status)
+ #   logging.info('Status of the pump to the room : ' + p_status)
     if (p_status == "close"):
         if (p_sensor_temp > p_desired_temp):
             logging.info(datetime.datetime.now() + ' Status of the room is CLOSED, temps are HIGHER then desired temp. Relays should be OPENING.')
@@ -303,7 +303,7 @@ if __name__ == '__main__':
             relay = getRelay(room.relay)
             status = relay.status
             temperatureCheck = room.temp_min - variable_check;
-            loggerCheck(room.name, room.sensor_floor, temperatureCheck, room.status)
+            loggerCheck(room.name, room.sensor_floor, temperatureCheck)
             #Inverting logic for cooling system. Swapped openRelay/closeRelay function for Cooling.
             if (status == "close"):
                 if (getDeviceTemp(room.sensor_floor) > temperatureCheck):
@@ -327,7 +327,7 @@ if __name__ == '__main__':
             relay = getRelay(room.relay)
             status = relay.status
             temperatureCheck = room.temp_min - variable_check;
-            loggerCheck(room.name, room.sensor_floor, temperatureCheck, room.status)
+            loggerCheck(room.name, room.sensor_floor, temperatureCheck)
             if (status == "close"):
                 if (getDeviceTemp(room.sensor_floor) < temperatureCheck):
                     logging.info(datetime.datetime.now() + ' OPENING RELAYS ( TEMPERATURE < MIN. TEMP + TEMERATURE CHECK.')
