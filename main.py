@@ -113,7 +113,7 @@ def getAllRelays():
         _db_cursor.execute(query)
         row = _db_cursor.fetchone()
         while row is not None:
-            relay = Relay(row[0], row[1], row[2])
+            relay = Relay(row[0], row[1], row[2], row[3])
             relays.append(relay)
             row = _db_cursor.fetchone()
         _db_conn.close()
@@ -135,7 +135,7 @@ def getAllRooms():
         _db_cursor.execute(query)
         row = _db_cursor.fetchone()
         while row is not None:
-            room = Room(row[0], row[1], row[2], row[3], row[4])
+            room = Room(row[0], row[1], row[2], row[3], row[4], row[5])
             rooms.append(room)
             row = _db_cursor.fetchone()
         _db_conn.close()   
