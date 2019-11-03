@@ -227,10 +227,8 @@ def openRelayLogic(p_relay):
         logging.info(' OPENING PUMP RELAY')
         openRelay(p_relay)
         time.sleep(2);
-        logging.info(' OPENING ' + p_relay)
         openRelay(getRelay("relay_pump"))
     else:
-        logging.info(' OPENING ' + p_relay)
         openRelay(p_relay)
 
 #A REFAIRE.
@@ -238,13 +236,10 @@ def openRelayLogicCooling(p_relay):
     pumpStatus = getPumpRelayStatus()
 
     if (pumpStatus == "close"):
-        logging.info(' OPENING PUMP RELAY')
         openRelay(getRelay("relay_pump"))
         time.sleep(2);
-        logging.info(' OPENING ' + p_relay)
         openRelay(p_relay)
     else:
-        logging.info(' OPENING ' + p_relay)
         openRelay(p_relay)
 
 
