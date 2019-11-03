@@ -283,10 +283,11 @@ def closeRelayLogicCooling(p_relay):
 
 def checkSystemRelayOpen(p_relay):
     relays = getAllRelays()
+    status = True
     for relay in relays:
         if (relay.type != "system" and relay.name != p_relay.name) and relay.status != "close":
-            return False
-    return True
+            status = False
+    return status
 
 def loggerCheck(p_room_name, p_sensor_temp, p_desired_temp):
     logging.info('Treating room : ' + p_room_name)
