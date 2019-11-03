@@ -1,23 +1,21 @@
+
+
+
 70.52.38.147 (jo house)
 192.168.2.34 (db + site + sensor)
 192.168.2.174 (etage sensor)
 192.168.2.131 (relays)
 
-Ajouter clim vs chauffage, checker DB, mode chauffage, dans glovbal settings on/off.
+Sensor DHT22-Temperature, setup is [DONE]
+DS18B20 Sensor, setup is [DONE]
 
-Check each room,
+Need to adjust the main.py for relays.
 
-if temp en bas de desired temp, check si la pump est ouverte si oui ouvre ler elay si non ouvre la pomp pis ouvre le relais (verifier logique)
+Add the "type" columns in rooms. (utility or heat or clim)
 
-si temp en haut de desired temnp, fermer le relays, check si reste jsute la pomp fermer la pompe, si ya un autre relais up laisser la pompe up.
+Check room and heat based off type instead of mode.
 
------
-
-TO DO's
-
- - Reformating the card. Keep old file.
- - Bring new Pi. LED Screen.
- - Buy 2 SD card. Sandisk Ultra.
+Function, 
  
  
 

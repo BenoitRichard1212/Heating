@@ -143,43 +143,43 @@ def getAllRooms():
     else:
         print("Could not connect to Database getAllRooms")
 
-#def getAllGlobalSettings():
-#    globalSettings = []
-#    _db_conn = mysql.connector.connect(host='192.168.2.34',
-#                                       database='temperatures',
-#                                       user='logger',
-#                                       password='password')
-#    if _db_conn.is_connected():
-#        print('Connected to MySQL database getAllGlobalSettings')
-#        _db_cursor = _db_conn.cursor()
-#        query = "SELECT * FROM global_settings"
-#        _db_cursor.execute(query)
-#        row = _db_cursor.fetchone()
-#        while row is not None:
-#            globalSetting = GlobalSetting(row[0], row[1])
-#            globalSettings.append(globalSetting)
-#            row = _db_cursor.fetchone()
-#        _db_conn.close()   
-#        return globalSettings
-#    else:
-#        print("Could not connect to Database getAllGlobalSettings")
+def getAllGlobalSettings():
+    globalSettings = []
+    _db_conn = mysql.connector.connect(host='192.168.2.34',
+                                       database='temperatures',
+                                       user='logger',
+                                       password='password')
+    if _db_conn.is_connected():
+        print('Connected to MySQL database getAllGlobalSettings')
+        _db_cursor = _db_conn.cursor()
+        query = "SELECT * FROM global_settings"
+        _db_cursor.execute(query)
+        row = _db_cursor.fetchone()
+        while row is not None:
+            globalSetting = GlobalSetting(row[0], row[1])
+            globalSettings.append(globalSetting)
+            row = _db_cursor.fetchone()
+        _db_conn.close()   
+        return globalSettings
+    else:
+        print("Could not connect to Database getAllGlobalSettings")
 
-#def getGlobalSetting(name):
-#    _db_conn = mysql.connector.connect(host='192.168.2.34',
-#                                       database='temperatures',
-#                                       user='logger',
-#                                       password='password')
-#    if _db_conn.is_connected():
-#        print('Connected to MySQL database getGloablSetting')
-#        _db_cursor = _db_conn.cursor()
-#        query = "SELECT * FROM global_settings WHERE name = '%s'" % (name)
-#        _db_cursor.execute(query)
-#        row = _db_cursor.fetchone()
-#        globalSetting = GlobalSetting(row[0], row[1])
-#        _db_conn.close()
-#        return globalSetting
-#    else:
-#        print("Could not connect to Database getRelay")
+def getGlobalSetting(name):
+    _db_conn = mysql.connector.connect(host='192.168.2.34',
+                                       database='temperatures',
+                                       user='logger',
+                                       password='password')
+    if _db_conn.is_connected():
+        print('Connected to MySQL database getGloablSetting')
+        _db_cursor = _db_conn.cursor()
+        query = "SELECT * FROM global_settings WHERE name = '%s'" % (name)
+        _db_cursor.execute(query)
+        row = _db_cursor.fetchone()
+        globalSetting = GlobalSetting(row[0], row[1])
+        _db_conn.close()
+        return globalSetting
+    else:
+        print("Could not connect to Database getRelay")
 
 
 def getSensorTemp(name):
@@ -221,17 +221,19 @@ def getDeviceTemp(name):
 
 def openRelayLogic(p_relay):
     pumpStatus = getPumpRelayStatus()
+    anotherIsOpen = checkSystemRelayOpen(p_relay)
 
-    if (pumpStatus == "close"):
+    if (anotherIsOpen == False):
         logging.info(' OPENING PUMP RELAY')
-        openRelay(getRelay("relay_pump"))
+        openRelay(p_relay)
         time.sleep(2);
         logging.info(' OPENING ' + p_relay)
-        openRelay(p_relay)
+        openRelay(getRelay("relay_pump"))
     else:
         logging.info(' OPENING ' + p_relay)
         openRelay(p_relay)
 
+#A REFAIRE.
 def openRelayLogicCooling(p_relay):
     pumpStatus = getPumpRelayStatus()
 
@@ -258,14 +260,16 @@ def pumpOnlyOpen():
 
 def closeRelayLogic(p_relay):
     relays = getAllRelays()
-    status = getPumpRelayStatus()
+    isAnotherOpen = checkSystemRelayOpen(p_relay)
 
     if (pumpOnlyOpen() == True):
-        logging.info(' CLOSING PUMP RELAY')
+        closeRelay(p_relay)
+    else
         closeRelay(getRelay("relay_pump"))
+        time.sleep(2);
+        closeRelay(p_relay)
 
-    closeRelay(p_relay)
-
+#A REFAIRE.
 def closeRelayLogicCooling(p_relay):
     relays = getAllRelays()
     status = getPumpRelayStatus()
@@ -277,6 +281,12 @@ def closeRelayLogicCooling(p_relay):
     logging.info(' CLOSING ' + p_relay)
     closeRelay(p_relay)
 
+def checkSystemRelayOpen(p_relay):
+    relays = getAllRelays()
+    for relay in relays:
+        if (relay.type != "system" and relay.name != p_relay.name) and relay.status != "close":
+            return False
+    return True
 
 def loggerCheck(p_room_name, p_sensor_temp, p_desired_temp):
     logging.info('Treating room : ' + p_room_name)
@@ -308,18 +318,10 @@ if __name__ == '__main__':
             loggerCheck(room.name, room.sensor_floor, temperatureCheck)
             #Inverting logic for cooling system. Swapped openRelay/closeRelay function for Cooling.
             if (status == "close"):
-                if (getDeviceTemp(room.sensor_floor) > temperatureCheck):
-                    logging.info(' OPENING RELAYS ( TEMPERATURE > MIN. TEMP + TEMERATURE CHECK.')
-                    logging.info('Current temperature : ' + room.sensor_floor)
-                    logging.info('Minimum temp. : ' + room.temp_min)
-                    logging.info('Variable temp check: ' + variable_check)
-                    openRelayLogicCooling(getRelay(room.relay))
+                if (getDeviceTemp(room.sensor_floor) < temperatureCheck):
+                    openRelayLogic(getRelay(room.relay))
             else:
                 if (getDeviceTemp(room.sensor_floor) < room.temp_min):
-                    logging.info(' CLOSING RELAYS ( TEMPERATURE < MIN. TEMP + TEMERATURE CHECK.')
-                    logging.info('Current temperature : ' + room.sensor_floor)
-                    logging.info('Minimum temp. : ' + room.temp_min)
-                    logging.info('Variable temp check: ' + variable_check)
                     closeRelayLogicCooling(getRelay(room.relay))
     else:
         #CHAUFFAGE
@@ -329,18 +331,9 @@ if __name__ == '__main__':
             relay = getRelay(room.relay)
             status = relay.status
             temperatureCheck = room.temp_min - variable_check;
-            loggerCheck(room.name, room.sensor_floor, temperatureCheck)
             if (status == "close"):
                 if (getDeviceTemp(room.sensor_floor) < temperatureCheck):
-                    logging.info(' OPENING RELAYS ( TEMPERATURE < MIN. TEMP + TEMERATURE CHECK.')
-                    logging.info('Current temperature : ' + room.sensor_floor)
-                    logging.info('Minimum temp. : ' + room.temp_min)
-                    logging.info('Variable temp check: ' + variable_check)
                     openRelayLogic(getRelay(room.relay))
             else:
                 if (getDeviceTemp(room.sensor_floor) > room.temp_min):
-                    logging.info(' CLOSING RELAYS ( TEMPERATURE > MIN. TEMP + TEMERATURE CHECK.')
-                    logging.info('Current temperature : ' + room.sensor_floor)
-                    logging.info('Minimum temp. : ' + room.temp_min)
-                    logging.info('Variable temp check: ' + variable_check)
                     closeRelayLogic(getRelay(room.relay))

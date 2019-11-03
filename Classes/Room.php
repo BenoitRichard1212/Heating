@@ -8,13 +8,16 @@
 		private $m_sensorFloor;
 		private $m_sensorWall;
 		private $m_relay;
-		public function __construct($p_name, $p_tempMin, $p_sensorFloor, $p_sensorWall, $p_relay)
+		private $m_mode;
+		public function __construct($p_name, $p_tempMin, $p_sensorFloor, $p_sensorWall, $p_relay, $p_mode)
         {
 			$this->m_name = $p_name;
 			$this->m_tempMin = $p_tempMin;
 			$this->m_sensorFloor = $p_sensorFloor;
 			$this->m_sensorWall = $p_sensorWall;
 			$this->m_relay = $p_relay;
+			$this->m_mode = $p_mode;
+
 		}
 
 		//GETTER's
@@ -43,6 +46,11 @@
 			return $this->m_relay;
 		}
 
+		public function getMode()
+		{
+			return $this->m_mode;
+		
+
 		//SETTER's
 		public function setName($p_name)
 		{
@@ -67,6 +75,11 @@
 		public function setRelay($p_relay)
 		{
 			$this->m_relay = $p_relay;
+		}
+
+		public function setMode($p_mode)
+		{
+			$this->m_mode = $p_mode;
 		}
 }		
 

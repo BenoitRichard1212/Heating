@@ -11,6 +11,7 @@
 			$this->m_name = $p_name;
 			$this->m_status = $p_status;
             $this->m_gpio = $p_gpio;
+            $this->m_type = $p_type;
 		}
 
 		//GETTER's
@@ -29,6 +30,11 @@
 			return $this->m_gpio;
 		}
 
+		public function getType()
+		{
+			return $this->m_type;
+		}
+
 		//SETTER's
 		public function setName($p_name)
 		{
@@ -43,6 +49,11 @@
 		public function setGpio($p_gpio)
 		{
 			$this->m_gpio = $p_gpio;
+		}
+
+		public function setType($p_type)
+		{
+			$this->m_type = $p_type;
 		}
 }		
 
