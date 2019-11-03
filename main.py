@@ -92,7 +92,7 @@ def getRelay(name):
         query = "SELECT * FROM relays WHERE name = '%s'" % (name)
         _db_cursor.execute(query)
         row = _db_cursor.fetchone()
-        relay = Relay(row[0], row[1], row[2])
+        relay = Relay(row[0], row[1], row[2], row[3])
         _db_conn.close()
         return relay
     else:
