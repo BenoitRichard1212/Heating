@@ -12,7 +12,7 @@ import logging
 
 GPIO.setmode(GPIO.BCM)
 variable_check = 1
-pumpRelay = Relay("relay_pump", "close", 17)
+pumpRelay = Relay("relay_pump", "close", 17, "utility")
 logging.basicConfig(filename="/var/log/Heating/sensors_log.txt", level=logging.INFO)
 
 def connect():
