@@ -264,7 +264,7 @@ def closeRelayLogic(p_relay):
 
     if (pumpOnlyOpen() == True):
         closeRelay(p_relay)
-    else
+    else:
         closeRelay(getRelay("relay_pump"))
         time.sleep(2);
         closeRelay(p_relay)
@@ -285,7 +285,7 @@ def checkSystemRelayOpen(p_relay):
     relays = getAllRelays()
     status = True
     for relay in relays:
-        if (relay.type != "system" and relay.name != p_relay.name) and relay.status != "close":
+        if (relay.type != "system" and relay.name != p_relay.name and relay.status != "close"):
             status = False
     return status
 
