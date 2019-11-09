@@ -306,12 +306,12 @@ if __name__ == '__main__':
             temperatureCheck = room.temp_min - variable_check
             loggerCheck(room.name, room.sensor_floor, temperatureCheck)
             #Inverting logic for cooling system. Swapped openRelay/closeRelay function for Cooling.
-            if (room.type == "cool"):
-                if (status == "close"):
-                    if (getDeviceTemp(room.sensor_floor) < temperatureCheck):
-                        openRelayLogic(getRelay(room.relay))
+            if (room.mode == "cool"):
+                if (getDeviceTemp(room.sensor_floor) > temperatureCheck):
+                    if (status == "close"):
+                        openRelayLogic(getRelay(getRelay(room.relay))
                 else:
-                    if (getDeviceTemp(room.sensor_floor) < room.temp_min):
+                    if (status == "open"):
                         closeRelayLogicCooling(getRelay(room.relay))
     else:
         #CHAUFFAGE
@@ -321,7 +321,7 @@ if __name__ == '__main__':
             relay = getRelay(room.relay)
             status = relay.status
             temperatureCheck = room.temp_min - variable_check
-            if (room.type == "heat"):
+            if (room.mode == "heat"):
                 if (getDeviceTemp(room.sensor_floor) < temperatureCheck):
                     if (status == "close"):
                         openRelayLogic(getRelay(room.relay))
