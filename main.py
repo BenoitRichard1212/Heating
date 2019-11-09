@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from relay import Relay
 from room import Room
-#from gobalSetting import GlobalSetting
+from gobalSetting import GlobalSetting
 import mysql.connector
 from mysql.connector import Error
 import RPi.GPIO as GPIO
@@ -293,8 +293,8 @@ def loggerCheck(p_room_name, p_sensor_temp, p_desired_temp):
 
 
 if __name__ == '__main__':
-    power = 1
-    modeClim = 0
+    power = getGlobalSetting("power")
+    modeClim = getGlobalSetting("modeClim")
      #CLIMATISATION
     if (power == 1):
         if (modeClim == 1):
