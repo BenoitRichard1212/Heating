@@ -310,7 +310,7 @@ if __name__ == '__main__':
                 if (getDeviceTemp(room.sensor_floor) > temperatureCheck):
                     if (status == "close"):
                         openRelayLogic(getRelay(getRelay(room.relay))
-                 else:
+                else:
                     if (status == "open"):
                         closeRelayLogicCooling(getRelay(room.relay))
     else:
