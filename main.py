@@ -297,34 +297,35 @@ if __name__ == '__main__':
     power = 1
     modeClim = 0
 #RAJOUTER MODE POWER ON / OFF.
-    if (modeClim == 1):
-        pumpRelay = getPumpRelayStatus()
-        rooms = getAllRooms()
-        for room in rooms:  
-            relay = getRelay(room.relay)
-            status = relay.status
-            temperatureCheck = room.temp_min - variable_check
-            loggerCheck(room.name, room.sensor_floor, temperatureCheck)
-            #Inverting logic for cooling system. Swapped openRelay/closeRelay function for Cooling.
-            if (room.mode == "cool"):
-                if (getDeviceTemp(room.sensor_floor) > temperatureCheck):
-                    if (status == "close"):
-                        openRelayLogicCooling(getRelay(room.relay))
-                else:
-                    if (status == "open"):
-                        closeRelayLogicCooling(getRelay(room.relay))                                      
-    else:
-        #CHAUFFAGE
-        pumpRelay = getPumpRelayStatus()
-        rooms = getAllRooms()
-        for room in rooms:  
-            relay = getRelay(room.relay)
-            status = relay.status
-            temperatureCheck = room.temp_min - variable_check
-            if (room.mode == "heat"):
-                if (getDeviceTemp(room.sensor_floor) < temperatureCheck):
-                    if (status == "close"):
-                        openRelayLogic(getRelay(room.relay))
-                else:
-                    if (status == "open"):
-                        closeRelayLogic(getRelay(room.relay))      
+    if (power == 1):
+        if (modeClim == 1):
+            pumpRelay = getPumpRelayStatus()
+            rooms = getAllRooms()
+            for room in rooms:  
+                relay = getRelay(room.relay)
+                status = relay.status
+                temperatureCheck = room.temp_min - variable_check
+                loggerCheck(room.name, room.sensor_floor, temperatureCheck)
+                #Inverting logic for cooling system. Swapped openRelay/closeRelay function for Cooling.
+                if (room.mode == "cool"):
+                    if (getDeviceTemp(room.sensor_floor) > temperatureCheck):
+                        if (status == "close"):
+                            openRelayLogicCooling(getRelay(room.relay))
+                    else:
+                        if (status == "open"):
+                            closeRelayLogicCooling(getRelay(room.relay))                                      
+        else:
+            #CHAUFFAGE
+            pumpRelay = getPumpRelayStatus()
+            rooms = getAllRooms()
+            for room in rooms:  
+                relay = getRelay(room.relay)
+                status = relay.status
+                temperatureCheck = room.temp_min - variable_check
+                if (room.mode == "heat"):
+                    if (getDeviceTemp(room.sensor_floor) < temperatureCheck):
+                        if (status == "close"):
+                            openRelayLogic(getRelay(room.relay))
+                    else:
+                        if (status == "open"):
+                            closeRelayLogic(getRelay(room.relay))      
