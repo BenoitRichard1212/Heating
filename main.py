@@ -309,10 +309,10 @@ if __name__ == '__main__':
             if (room.mode == "cool"):
                 if (getDeviceTemp(room.sensor_floor) > temperatureCheck):
                     if (status == "close"):
-                        openRelayLogic(getRelay(getRelay(room.relay))
+                        openRelayLogicCooling(getRelay(room.relay))
                 else:
                     if (status == "open"):
-                        closeRelayLogicCooling(getRelay(room.relay))
+                        closeRelayLogicCooling(getRelay(room.relay))                                      
     else:
         #CHAUFFAGE
         pumpRelay = getPumpRelayStatus()
@@ -327,4 +327,4 @@ if __name__ == '__main__':
                         openRelayLogic(getRelay(room.relay))
                 else:
                     if (status == "open"):
-                        closeRelayLogic(getRelay(room.relay))
+                        closeRelayLogic(getRelay(room.relay))      
