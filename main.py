@@ -293,10 +293,9 @@ def loggerCheck(p_room_name, p_sensor_temp, p_desired_temp):
 
 
 if __name__ == '__main__':
-    #CLIMATISATION
-    power = 1
-    modeClim = 0
-#RAJOUTER MODE POWER ON / OFF.
+    power = getGlobalSetting("power")
+    modeClim = getGlobalSetting("modeClim")
+     #CLIMATISATION
     if (power == 1):
         if (modeClim == 1):
             pumpRelay = getPumpRelayStatus()
