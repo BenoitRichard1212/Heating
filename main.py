@@ -252,7 +252,7 @@ def pumpOnlyOpen():
 def closeRelayLogic(p_relay):
     isAnotherOpen = checkSystemRelayOpen(p_relay)
 
-    if (isAnotherOpen() == True):
+    if (isAnotherOpen == True):
         closeRelay(p_relay)
     else:
         closeRelay(getRelay("relay_pump"))
