@@ -327,4 +327,9 @@ if __name__ == '__main__':
                             openRelayLogic(getRelay(room.relay))
                     else:
                         if (status == "open"):
-                            closeRelayLogic(getRelay(room.relay))      
+                            closeRelayLogic(getRelay(room.relay))
+else:
+    for room in rooms:  
+                relay = getRelay(room.relay)   
+                closeRelayLogic(getRelay(room.relay))
+    
