@@ -230,13 +230,13 @@ def openRelayLogic(p_relay):
 
 #A REFAIRE.
 def openRelayLogicCooling(p_relay):
-    pumpStatus = getPumpRelayStatus()
-    if (pumpStatus == "close"):
+    isAnotherOpen = checkSystemRelayOpen(p_relay)
+    
+    if (isAnotherOpen == False):
         openRelay(getRelay("relay_pump"))
         time.sleep(2);
-        openRelay(p_relay)
-    else:
-        openRelay(p_relay)
+        
+    openRelay(p_relay)
 
 
 def pumpOnlyOpen():
@@ -261,14 +261,12 @@ def closeRelayLogic(p_relay):
 
 #A REFAIRE.
 def closeRelayLogicCooling(p_relay):
-    relays = getAllRelays()
-    status = getPumpRelayStatus()
+    isAnotherOpen = checkSystemRelayOpen(p_realy)
 
-    if (pumpOnlyOpen() == True):
-        logging.info(' CLOSING PUMP RELAY')
+    if (isAnotherOpen == False):
         closeRelay(getRelay("relay_pump"))
-
-    logging.info(' CLOSING ' + p_relay)
+        time.sleep(2);
+        
     closeRelay(p_relay)
 
 def checkSystemRelayOpen(p_relay):
@@ -308,12 +306,13 @@ if __name__ == '__main__':
             temperatureCheck = room.temp_min - variable_check
             loggerCheck(room.name, room.sensor_floor, temperatureCheck)
             #Inverting logic for cooling system. Swapped openRelay/closeRelay function for Cooling.
-            if (status == "close"):
-                if (getDeviceTemp(room.sensor_floor) < temperatureCheck):
-                    openRelayLogic(getRelay(room.relay))
-            else:
-                if (getDeviceTemp(room.sensor_floor) < room.temp_min):
-                    closeRelayLogicCooling(getRelay(room.relay))
+            if (room.type == "cool"):
+                if (status == "close"):
+                    if (getDeviceTemp(room.sensor_floor) < temperatureCheck):
+                        openRelayLogic(getRelay(room.relay))
+                else:
+                    if (getDeviceTemp(room.sensor_floor) < room.temp_min):
+                        closeRelayLogicCooling(getRelay(room.relay))
     else:
         #CHAUFFAGE
         pumpRelay = getPumpRelayStatus()
@@ -322,9 +321,10 @@ if __name__ == '__main__':
             relay = getRelay(room.relay)
             status = relay.status
             temperatureCheck = room.temp_min - variable_check
-            if (getDeviceTemp(room.sensor_floor) < temperatureCheck):
-                if (status == "close"):
-                    openRelayLogic(getRelay(room.relay))
-            else:
-                if (status == "open"):
-                    closeRelayLogic(getRelay(room.relay))
+            if (room.type == "heat"):
+                if (getDeviceTemp(room.sensor_floor) < temperatureCheck):
+                    if (status == "close"):
+                        openRelayLogic(getRelay(room.relay))
+                else:
+                    if (status == "open"):
+                        closeRelayLogic(getRelay(room.relay))
