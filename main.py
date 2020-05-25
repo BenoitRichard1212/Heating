@@ -337,8 +337,8 @@ def loggerCheck(p_room_name, p_sensor_temp, p_desired_temp):
 
 
 if __name__ == '__main__':
-    power_shutoff = getGlobalSetting("power_shutoff")
-    modeClim = getGlobalSetting("modeClim")
+    #power_shutoff = getGlobalSetting("power_shutoff")
+    #modeClim = getGlobalSetting("modeClim")
     #piscine = getGlobalSetting("modePiscine")
     modePiscine = 0
     #Check pour sequence de fermeture.
@@ -357,8 +357,9 @@ if __name__ == '__main__':
 
     #   systemShutdown()
 
-    power = getGlobalSetting("power")
-
+    #power = getGlobalSetting("power")
+    power = 1
+    modeClim = 1
     #CLIMATISATION.
     if (power == 1):
         if (modeClim == 1):
