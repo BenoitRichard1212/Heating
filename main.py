@@ -342,20 +342,20 @@ if __name__ == '__main__':
     #piscine = getGlobalSetting("modePiscine")
     modePiscine = 0
     #Check pour sequence de fermeture.
-    if (power_shutoff == 1):
-        if (checkIfPumpRelayOpen() == True):
-            closeRelay(getRelay("relay_pump"))
+    #if (power_shutoff == 1):
+    #    if (checkIfPumpRelayOpen() == True):
+    #        closeRelay(getRelay("relay_pump"))
 
-        for room in rooms:  
-                relay = getRelay(room.relay)
-                status = relay.status
-                temperatureCheck = room.temp_min - variable_check
-                loggerCheck(room.name, room.sensor_floor, temperatureCheck)
-                closeRelay(getRelay(room.relay))
-                if (room.mode == "cool"):
-                    closeRelay(getRelay(room.relay_second))
+    #    for room in rooms:  
+    #            relay = getRelay(room.relay)
+    #            status = relay.status
+    #            temperatureCheck = room.temp_min - variable_check
+    #            loggerCheck(room.name, room.sensor_floor, temperatureCheck)
+    #            closeRelay(getRelay(room.relay))
+    #            if (room.mode == "cool"):
+    #                closeRelay(getRelay(room.relay_second))
 
-        systemShutdown()
+    #   systemShutdown()
 
     power = getGlobalSetting("power")
 
