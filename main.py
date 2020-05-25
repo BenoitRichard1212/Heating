@@ -342,7 +342,7 @@ if __name__ == '__main__':
     modeClim = getGlobalSetting("modeClim")
     #piscine = getGlobalSetting("modePiscine")
     modePiscine = 0
-    #Check pour séquence de fermeture.
+    #Check pour sequence de fermeture.
     if (power_shutoff == 1):
         if (checkIfPumpRelayOpen() == True):
             closeRelay(getRelay("relay_pump"))
