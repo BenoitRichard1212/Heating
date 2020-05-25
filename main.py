@@ -71,7 +71,7 @@ def getPumpRelayStatus():
     if _db_conn.is_connected():
         print('Connected to MySQL database getPumpRelayStatus')
         _db_cursor = _db_conn.cursor()
-        query = "SELECT status FROM relays WHERE name = 'relay_pump'"
+        query = "SELECT status FROM relays WHERE name = 'relay_pump';"
         _db_cursor.execute(query)
         row = _db_cursor.fetchone()
         result = row[0]
@@ -89,7 +89,7 @@ def getRelay(name):
     if _db_conn.is_connected():
         print('Connected to MySQL database getRelay')
         _db_cursor = _db_conn.cursor()
-        query = "SELECT * FROM relays WHERE name = '%s'" % (name)
+        query = "SELECT * FROM relays WHERE name = '%s';" % (name)
         _db_cursor.execute(query)
         row = _db_cursor.fetchone()
         relay = Relay(row[0], row[1], row[2], row[3])
@@ -109,7 +109,7 @@ def getAllRelays():
     if _db_conn.is_connected():
         print('Connected to MySQL database getAllRelays')
         _db_cursor = _db_conn.cursor()
-        query = "SELECT * FROM relays"
+        query = "SELECT * FROM relays;"
         _db_cursor.execute(query)
         row = _db_cursor.fetchone()
         while row is not None:
@@ -131,11 +131,11 @@ def getAllRooms():
     if _db_conn.is_connected():
         print('Connected to MySQL database getAllRooms')
         _db_cursor = _db_conn.cursor()
-        query = "SELECT * FROM rooms"
+        query = "SELECT * FROM rooms;"
         _db_cursor.execute(query)
         row = _db_cursor.fetchone()
         while row is not None:
-            room = Room(row[0], row[1], row[2], row[3], row[4], row[5])
+            room = Room(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
             rooms.append(room)
             row = _db_cursor.fetchone()
         _db_conn.close()   
@@ -152,7 +152,7 @@ def getAllGlobalSettings():
     if _db_conn.is_connected():
         print('Connected to MySQL database getAllGlobalSettings')
         _db_cursor = _db_conn.cursor()
-        query = "SELECT * FROM global_settings"
+        query = "SELECT * FROM global_settings;"
         _db_cursor.execute(query)
         row = _db_cursor.fetchone()
         while row is not None:
@@ -172,12 +172,42 @@ def getGlobalSetting(name):
     if _db_conn.is_connected():
         print('Connected to MySQL database getGloablSetting')
         _db_cursor = _db_conn.cursor()
-        query = "SELECT * FROM global_settings WHERE name = '%s'" % (name)
+        query = "SELECT * FROM global_settings WHERE name = '%s';" % (name)
         _db_cursor.execute(query)
         row = _db_cursor.fetchone()
         globalSetting = GlobalSetting(row[0], row[1])
         _db_conn.close()
         return globalSetting
+    else:
+        print("Could not connect to Database getRelay")
+
+def setPower():
+    _db_conn = mysql.connector.connect(host='192.168.2.34',
+                                       database='temperatures',
+                                       user='logger',
+                                       password='password')
+    if _db_conn.is_connected():
+        print('Connected to MySQL database getGloablSetting')
+        _db_cursor = _db_conn.cursor()
+        query = "UPDATE global_settings SET value = 0 WHERE name = 'power';"
+        _db_cursor.execute(query)
+        _db_conn.commit()
+        _db_conn.close()
+    else:
+        print("Could not connect to Database getRelay")
+
+def setShutDownIni t():
+    _db_conn = mysql.connector.connect(host='192.168.2.34',
+                                       database='temperatures',
+                                       user='logger',
+                                       password='password')
+    if _db_conn.is_connected():
+        print('Connected to MySQL database getGloablSetting')
+        _db_cursor = _db_conn.cursor()
+        query = "UPDATE global_settings SET value = 0 WHERE name = 'power_shutoff';"
+        _db_cursor.execute(query)
+        _db_conn.commit()
+        _db_conn.close()
     else:
         print("Could not connect to Database getRelay")
 
@@ -191,7 +221,7 @@ def getSensorTemp(name):
         print('Connected to MySQL database getSensorTemp')
         _db_cursor = _db_conn.cursor()
 
-        query = "SELECT temperature FROM temperaturedata WHERE sensor = '%s'" % (name)
+        query = "SELECT temperature FROM temperaturedata WHERE sensor = '%s';" % (name)
         _db_cursor.execute(query)
         row = _db_cursor.fetchone()
         result = row[0]
@@ -209,7 +239,7 @@ def getDeviceTemp(name):
         print('Connected to MySQL database getSensorTemp')
         _db_cursor = _db_conn.cursor()
 
-        query = "SELECT temperature FROM temperaturedata WHERE sensor = '%s'" % (name)
+        query = "SELECT temperature FROM temperaturedata WHERE sensor = '%s';" % (name)
         _db_cursor.execute(query)
         row = _db_cursor.fetchone()
         result = row[0]
@@ -228,14 +258,15 @@ def openRelayLogic(p_relay):
     else:
         openRelay(p_relay)
 
-#A REFAIRE.
-def openRelayLogicCooling(p_relay):
+def openRelayLogicCooling(p_relay, p_relay_second):
     isAnotherOpen = checkSystemRelayOpen(p_relay)
     
     if (isAnotherOpen == False):
         openRelay(getRelay("relay_pump"))
         time.sleep(2);
-        
+    
+    openRelay(p_relay_second)
+    time.sleep(2);    
     openRelay(p_relay)
 
 
@@ -248,6 +279,14 @@ def pumpOnlyOpen():
             closePump = False
     return closePump
 
+def checkIfPumpRelayOpen():
+    pump_status = False
+    relays = getAllRelays()
+    for relay in relays:
+        if (relay.name == "relay_pump" and relay.status == "open"):
+            pump_status = True
+    return pump_status    
+
 
 def closeRelayLogic(p_relay):
     isAnotherOpen = checkSystemRelayOpen(p_relay)
@@ -259,14 +298,15 @@ def closeRelayLogic(p_relay):
         time.sleep(2);
         closeRelay(p_relay)
 
-#A REFAIRE.
-def closeRelayLogicCooling(p_relay):
+def closeRelayLogicCooling(p_relay, p_relay_second):
     isAnotherOpen = checkSystemRelayOpen(p_realy)
 
     if (isAnotherOpen == False):
         closeRelay(getRelay("relay_pump"))
         time.sleep(2);
-        
+    
+    closeRelay(p_relay_second)
+    time.sleep(2);
     closeRelay(p_relay)
 
 def checkSystemRelayOpen(p_relay):
@@ -276,6 +316,11 @@ def checkSystemRelayOpen(p_relay):
         if (relay.type == "system" and relay.name != p_relay.name and relay.status == "open"):
             status = True
     return status
+
+def systemShutdown():
+    #La function de setGlobalSettings va changer pour etre plus versatile, on la reutilisera ici.
+    setPower()
+    setShutDownInit()
 
 def loggerCheck(p_room_name, p_sensor_temp, p_desired_temp):
     logging.info('Treating room : ' + p_room_name)
@@ -293,17 +338,36 @@ def loggerCheck(p_room_name, p_sensor_temp, p_desired_temp):
 
 
 if __name__ == '__main__':
-    #power = getGlobalSetting("power")
-    #modeClim = getGlobalSetting("modeClim")
-    power = 1
-    modeClim = 0
-    #CLIMATISATION
+    power_shutoff = getGlobalSetting("power_shutoff")
+    modeClim = getGlobalSetting("modeClim")
+    #piscine = getGlobalSetting("modePiscine")
+    modePiscine = 0
+    #Check pour séquence de fermeture.
+    if (power_shutoff == 1):
+        if (checkIfPumpRelayOpen() == True):
+            closeRelay(getRelay("relay_pump"))
+
+        for room in rooms:  
+                relay = getRelay(room.relay)
+                status = relay.status
+                temperatureCheck = room.temp_min - variable_check
+                loggerCheck(room.name, room.sensor_floor, temperatureCheck)
+                closeRelay(getRelay(room.relay))
+                if (room.mode == "cool"):
+                    closeRelay(getRelay(room.relay_second))
+
+        systemShutdown()
+
+    power = getGlobalSetting("power")
+
+    #CLIMATISATION.
     if (power == 1):
         if (modeClim == 1):
             pumpRelay = getPumpRelayStatus()
             rooms = getAllRooms()
             for room in rooms:  
                 relay = getRelay(room.relay)
+                relay_second = getRelay(room.relay_second)
                 status = relay.status
                 temperatureCheck = room.temp_min - variable_check
                 loggerCheck(room.name, room.sensor_floor, temperatureCheck)
@@ -311,10 +375,10 @@ if __name__ == '__main__':
                 if (room.mode == "cool"):
                     if (getDeviceTemp(room.sensor_floor) > temperatureCheck):
                         if (status == "close"):
-                            openRelayLogicCooling(getRelay(room.relay))
+                            openRelayLogicCooling(getRelay(room.relay), getRelay(room.relay_second))
                     else:
                         if (status == "open"):
-                            closeRelayLogicCooling(getRelay(room.relay))                                      
+                            closeRelayLogicCooling(getRelay(room.relay), getRelay(room.relay_second))                                      
         else:
             #CHAUFFAGE
             pumpRelay = getPumpRelayStatus()
@@ -330,8 +394,3 @@ if __name__ == '__main__':
                     else:
                         if (status == "open"):
                             closeRelayLogic(getRelay(room.relay))
-    else:
-        for room in rooms:  
-                    relay = getRelay(room.relay)   
-                    closeRelayLogic(getRelay(room.relay))
-    
