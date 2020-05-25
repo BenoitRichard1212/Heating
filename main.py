@@ -362,6 +362,7 @@ if __name__ == '__main__':
     #CLIMATISATION.
     if (power == 1):
         if (modeClim == 1):
+            print("Mode clim")  
             pumpRelay = getPumpRelayStatus()
             rooms = getAllRooms()
             for room in rooms:  
@@ -369,10 +370,10 @@ if __name__ == '__main__':
                 relay_second = getRelay(room.relay_second)
                 status = relay.status
                 temperatureCheck = room.temp_min - variable_check
-                loggerCheck(room.name, room.sensor_floor, temperatureCheck)
+                loggerCheck(room.name, room.sensor_wall, temperatureCheck)
                 #Inverting logic for cooling system. Swapped openRelay/closeRelay function for Cooling.
                 if (room.mode == "cool"):
-                    if (getDeviceTemp(room.sensor_floor) > temperatureCheck):
+                    if (getDeviceTemp(room.sensor_wall) > temperatureCheck):
                         if (status == "close"):
                             openRelayLogicCooling(getRelay(room.relay), getRelay(room.relay_second))
                     else:
@@ -380,6 +381,7 @@ if __name__ == '__main__':
                             closeRelayLogicCooling(getRelay(room.relay), getRelay(room.relay_second))                                      
         else:
             #CHAUFFAGE
+            print("Mode chauffage")
             pumpRelay = getPumpRelayStatus()
             rooms = getAllRooms()
             for room in rooms:  
