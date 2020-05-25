@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from relay import Relay
 from room import Room
-#from globalSetting import GlobalSetting
+from globalSetting import GlobalSetting
 import mysql.connector
 from mysql.connector import Error
 import RPi.GPIO as GPIO
