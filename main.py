@@ -196,7 +196,7 @@ def setPower():
     else:
         print("Could not connect to Database getRelay")
 
-def setShutDownIni t():
+def setShutDownInit():
     _db_conn = mysql.connector.connect(host='192.168.2.34',
                                        database='temperatures',
                                        user='logger',
