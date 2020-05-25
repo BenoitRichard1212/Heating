@@ -298,7 +298,7 @@ def closeRelayLogic(p_relay):
         closeRelay(p_relay)
 
 def closeRelayLogicCooling(p_relay, p_relay_second):
-    isAnotherOpen = checkSystemRelayOpen(p_realy)
+    isAnotherOpen = checkSystemRelayOpen(p_relay)
 
     if (isAnotherOpen == False):
         closeRelay(getRelay("relay_pump"))
