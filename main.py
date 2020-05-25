@@ -261,14 +261,13 @@ def openRelayLogic(p_relay):
 def openRelayLogicCooling(p_relay, p_relay_second):
     isAnotherOpen = checkSystemRelayOpen(p_relay)
     
+    openRelay(p_relay)
+    time.sleep(1);    
+    openRelay(p_relay_second)
+    
     if (isAnotherOpen == False):
         openRelay(getRelay("relay_pump"))
         time.sleep(2);
-    
-    openRelay(p_relay_second)
-    time.sleep(2);    
-    openRelay(p_relay)
-
 
 def pumpOnlyOpen():
     closePump = True
@@ -305,9 +304,9 @@ def closeRelayLogicCooling(p_relay, p_relay_second):
         closeRelay(getRelay("relay_pump"))
         time.sleep(2);
     
-    closeRelay(p_relay_second)
-    time.sleep(2);
     closeRelay(p_relay)
+    time.sleep(1);
+    closeRelay(p_relay_second)
 
 def checkSystemRelayOpen(p_relay):
     relays = getAllRelays()
