@@ -1,4 +1,6 @@
-
+1) Le fetch du modeClim en python ne fonctionne pas, ajuster la fonction getGlobalSettings.
+2) Un bouton pour on/off manuellement pour les fournaise.
+3) faire changer la couleur du mode clim selon le mode.
 
 
 70.52.38.147 (jo house)
