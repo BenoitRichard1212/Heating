@@ -175,9 +175,9 @@ def getGlobalSetting(name):
         query = "SELECT * FROM global_settings WHERE name = '%s';" % (name)
         _db_cursor.execute(query)
         row = _db_cursor.fetchone()
-        relay = Relay(row[0], row[1])
+        globalsetting = GlobalSetting(row[0], row[1])
         _db_conn.close()
-        return relay
+        return globalsetting
     else:
         print("Could not connect to Database temperatures")
 
