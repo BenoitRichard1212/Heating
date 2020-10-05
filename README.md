@@ -1,6 +1,23 @@
 1) Le fetch du modeClim en python ne fonctionne pas, ajuster la fonction getGlobalSettings.
 2) Un bouton pour on/off manuellement pour les fournaise.
 3) faire changer la couleur du mode clim selon le mode.
+4) en mode clim aussi activer le relay_mode_climatisation
+5) Systeme independant pour la thermo, 
+
+6) chauffage, heat la thermo si la temperature de la thermo est en bas de la demande (temperature + degree de correction), on part la switch de la pompe, apres on part l'element. 
+  
+  quand la temperature est atteinte, on ferme l'élément, on ferme la pompe apres un delay (variable = delay de fermeture de la pompe de thermo)
+  
+  
+  climatisation, si la temperature est au dessous de la demande, on part la pompe et ensuite le relay,
+  
+  quand la temperature est atteinte on ferme la pompe + delais variable.
+  
+7) mini script pour activer un GPIO on demand, on et off.
+
+
+
+
 
 
 70.52.38.147 (jo house)
