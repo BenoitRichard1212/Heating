@@ -170,16 +170,16 @@ def getGlobalSetting(name):
                                        user='logger',
                                        password='password')
     if _db_conn.is_connected():
-        print('Connected to MySQL database getGloablSetting')
+        print('Connected to MySQL database temperatures')
         _db_cursor = _db_conn.cursor()
         query = "SELECT * FROM global_settings WHERE name = '%s';" % (name)
         _db_cursor.execute(query)
         row = _db_cursor.fetchone()
-        globalSetting = GlobalSetting(row[0], row[1])
+        relay = Relay(row[0], row[1])
         _db_conn.close()
-        return globalSetting
+        return relay
     else:
-        print("Could not connect to Database getRelay")
+        print("Could not connect to Database temperatures")
 
 def setPower():
     _db_conn = mysql.connector.connect(host='192.168.2.34',
@@ -359,7 +359,7 @@ if __name__ == '__main__':
 
     #power = getGlobalSetting("power")
     power = 1
-    modeClim = 0
+    modeClim = getGlobalSetting("modeClim")
     #CLIMATISATION.
     if (power == 1):
         if (modeClim == 1):
