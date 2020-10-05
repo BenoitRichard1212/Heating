@@ -359,7 +359,7 @@ if __name__ == '__main__':
 
     #power = getGlobalSetting("power")
     power = 1
-    modeClim = 1
+    modeClim = 0
     #CLIMATISATION.
     if (power == 1):
         if (modeClim == 1):
